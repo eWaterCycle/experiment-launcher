@@ -2,3 +2,7 @@
 
 eWaterCycle Experiment Launcher a w ebservice to generate and launch a Jupyter notebook.
 
+# Install
+
+## Setup a Jupyter hub
+
