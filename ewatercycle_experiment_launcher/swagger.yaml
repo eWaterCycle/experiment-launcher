@@ -11,12 +11,31 @@ produces:
 paths:
   /hello:
     post:
+      summary: Notebook that prints Hello World
       parameters:
         - in: body
           name: request
           description: The notebook to create
           schema:
             $ref: '#/definitions/HelloRequest'
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/NotebookResponse'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /opendap:
+    post:
+      summary: Notebook that opens an opendap URL with xarray
+      parameters:
+        - in: body
+          name: request
+          description: The notebook to create
+          schema:
+            $ref: '#/definitions/OpendapRequest'
       responses:
         201:
           description: Created
@@ -44,6 +63,19 @@ definitions:
         $ref: '#/definitions/NotebookRequest'
     required:
       - notebook
+    additionalProperties: false
+  OpendapRequest:
+    type: object
+    properties:
+      opendap:
+        type: string
+        format: uri
+        description: URL of opendap endpoint
+      notebook:
+        $ref: '#/definitions/NotebookRequest'
+    required:
+      - notebook
+      - opendap
     additionalProperties: false
   NotebookRequest:
     type: object
