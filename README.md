@@ -2,6 +2,8 @@
 
 eWaterCycle Experiment Launcher a webservice to generate and launch a Jupyter notebook.
 
+The API of the webservice is described in Swagger specification at [swagger.yaml](https://github.com/eWaterCycle/experiment-launcher/blob/master/ewatercycle_experiment_launcher/swagger.yaml) and can be seen in [Swagger UI](http://petstore.swagger.io/?url=https://raw.githubusercontent.com/eWaterCycle/experiment-launcher/master/ewatercycle_experiment_launcher/swagger.yaml)
+
 # Install
 
 Requirements:
