@@ -1,0 +1,85 @@
+swagger: '2.0'
+info:
+  version: 0.1.0
+  title: eWaterCycle Experiment Launcher
+  description: Webservice to generate and launch a Jupyter notebook
+consumes:
+  - application/json
+produces:
+  - application/json
+  - application/problem+json
+paths:
+  /hello:
+    post:
+      parameters:
+        - in: body
+          name: request
+          description: The notebook to create
+          schema:
+            $ref: '#/definitions/HelloRequest'
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/NotebookResponse'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  NotebookResponse:
+    type: object
+    properties:
+      location:
+        type: string
+        format: uri
+        description: URL of experiment notebook on Jupyter Lab server
+    required:
+    - location
+    additionalProperties: false
+  HelloRequest:
+    type: object
+    properties:
+      notebook:
+        $ref: '#/definitions/NotebookRequest'
+    required:
+      - notebook
+    additionalProperties: false
+  NotebookRequest:
+    type: object
+    required:
+      - username
+      - directory
+    properties:
+      directory:
+        type: string
+        description: Name of directory inside Jupyter Lab
+      filename:
+        type: string
+        description: Name of notebook
+        default: experiment.ipynb
+      username:
+        type: string
+        description: Create Jupyter Lab server for this user
+    additionalProperties: false
+  Error:
+    type: object
+    description: >-
+      Problem Details for HTTP APIs, see
+      https://tools.ietf.org/html/draft-ietf-appsawg-http-problem-00
+    properties:
+      status:
+        type: integer
+        format: int32
+      type:
+        type: string
+      detail:
+        type: string
+      title:
+        type: string
+    required:
+      - status
+      - type
+      - title
+      - detail
+    additionalProperties: false

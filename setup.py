@@ -11,7 +11,7 @@ with open('README.md') as readme_file:
 with open('CHANGELOG.md') as history_file:
     history = history_file.read()
 
-requirements = ['Click>=6.0', 'nbformat', 'requests']
+requirements = ['Click>=6.0', 'nbformat', 'requests', 'connexion', 'gunicorn']
 
 setup_requirements = ['pytest-runner', ]
 
@@ -48,4 +48,7 @@ setup(
     url='https://github.com/ewatercycle/ewatercycle_experiment_launcher',
     version='0.1.0',
     zip_safe=False,
+    package_data={
+      'ewatercycle_experiment_launcher': ['api.yaml'],
+    },
 )

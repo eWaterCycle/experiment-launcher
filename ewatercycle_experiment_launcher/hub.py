@@ -1,7 +1,4 @@
-from io import StringIO
-
 import requests
-import nbformat
 
 
 class JupyterHubClient:
@@ -12,6 +9,10 @@ class JupyterHubClient:
         self.username = username
 
     def start_server(self):
+        """Starts Jupyter notebook server for user with `username`.
+
+        When server is already running will also be successful.
+        """
         url = '{0}/hub/api/users/{1}/server'.format(self.jupyterhub_url, self.username)
         r = self.agent.post(url)
         if r.status_code == 201 or (r.status_code == 400 and 'already running' in r.json()['message']):
@@ -27,9 +28,10 @@ class JupyterHubClient:
         r.raise_for_status()
 
     def upload_notebook(self, notebook, path):
-        url = '{0}/user/{1}/api/contents/{2}'.format(self.jupyterhub_url, self.username, path)
-        buffer = StringIO()
-        nbformat.write(notebook, buffer, version=4)
-        r = self.agent.put(url, data=buffer)
+        api_url = '{0}/user/{1}/api/contents/{2}'.format(self.jupyterhub_url, self.username, path)
+        content = {'type': 'notebook', 'format': 'json', 'content': notebook}
+        r = self.agent.put(api_url, json=content)
         r.raise_for_status()
+        nb_url = '{0}/user/{1}/lab/tree/{2}'.format(self.jupyterhub_url, self.username, path)
+        return nb_url
 

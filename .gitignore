@@ -107,3 +107,8 @@ venv.bak/
 
 # IDE
 .idea/
+/jupyterhub.sqlite
+/jupyterhub_config.py
+/jupyterhub_cookie_secret
+/node_modules/
+/package-lock.json

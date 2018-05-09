@@ -1,0 +1,14 @@
+c.JupyterHub.admin_access = True
+c.JupyterHub.services = [
+     {
+         'name': 'experiment-launcher',
+         'admin': True,
+         'api_token': '<replace me with a random string>',
+     }
+]
+
+c.Spawner.default_url = '/lab'
+c.JupyterHub.spawner_class = 'dockerspawner.SystemUserSpawner'
+c.DockerSpawner.image = 'ewatercycle/experiment-builder'
+# Use ip of Docker network interface to connect Docker containers with hub
+c.JupyterHub.hub_ip = '172.17.0.1'
