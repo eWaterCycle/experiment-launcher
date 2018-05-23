@@ -10,3 +10,9 @@ install: pip install -U tox-travis
 
 # Command to run tests, e.g. python setup.py test
 script: tox
+addons:
+  sonarcloud:
+    organization: ewatercycle
+after_success:
+ - sonar-scanner -Dsonar.login=$SONAR_TOKEN
+

@@ -1,5 +1,9 @@
 # experiment-launcher
 
+[![Build Status](https://travis-ci.org/eWaterCycle/experiment-launcher.svg?branch=master)](https://travis-ci.org/eWaterCycle/experiment-launcher)
+[![SonarCloud quality gate](https://sonarcloud.io/api/project_badges/measure?project=experiment-launcher&metric=alert_status)](https://sonarcloud.io/dashboard?id=experiment-launcher)
+[![SonarCloud coverage](https://sonarcloud.io/api/project_badges/measure?project=experiment-launcher&metric=coverage)](https://sonarcloud.io/component_measures?id=experiment-launcher&metric=coverage)
+
 eWaterCycle Experiment Launcher a webservice to generate and launch a Jupyter notebook.
 
 The API of the webservice is described in Swagger specification at [swagger.yaml](https://github.com/eWaterCycle/experiment-launcher/blob/master/ewatercycle_experiment_launcher/swagger.yaml) and can be seen in [Swagger UI](http://petstore.swagger.io/?url=https://raw.githubusercontent.com/eWaterCycle/experiment-launcher/master/ewatercycle_experiment_launcher/swagger.yaml)
