@@ -40,7 +40,7 @@ python setup.py develop
 ```bash
 # JUPYTERHUB_TOKEN env var should be set to same value as token in jupyterhub_config.py
 export JUPYTERHUB_URL=http://172.17.0.1:8000
-gunicorn -b 0.0.0.0:8888 ewatercycle_experiment_launcher.serve:app
+gunicorn -w 4 -b 0.0.0.0:8888 ewatercycle_experiment_launcher.serve:app
 ```
 
 Goto http://localhost:8888/ui/ for Swagger UI.
