@@ -41,4 +41,10 @@ export JUPYTERHUB_URL=http://172.17.0.1:8000
 gunicorn -b 0.0.0.0:8888 ewatercycle_experiment_launcher.serve:app
 ```
 
-Goto http://localhost:8888/ui/ for Swagger UI
+Goto http://localhost:8888/ui/ for Swagger UI.
+
+The JupyterHub and Experiment Launcher use local OS accounts for authentication and authorization.
+
+In the Swagger UI you must authorize before trying an operation.
+
+When running on Internet make sure https is enforced so the authentication is secure.

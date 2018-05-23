@@ -3,10 +3,12 @@ import textwrap
 from nbformat import NotebookNode
 from nbformat.v4 import new_markdown_cell, new_code_cell, new_notebook
 
+from ewatercycle_experiment_launcher.auth import requires_auth
 from ewatercycle_experiment_launcher.generate import PY3_META
 from ewatercycle_experiment_launcher.process import process_notebook
 
 
+@requires_auth
 def post(request):
     """Generate hello world notebook and launch it"""
     return process_notebook(request['notebook'], notebook(request['opendap']))
