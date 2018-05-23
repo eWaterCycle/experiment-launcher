@@ -15,7 +15,7 @@ requirements = ['nbformat', 'requests', 'connexion', 'gunicorn', 'decorator', 's
 
 setup_requirements = ['pytest-runner', ]
 
-test_requirements = ['pytest', ]
+test_requirements = ['pytest', 'coverage', 'pytest-cov']
 
 setup(
     author="Stefan Verhoeven",
