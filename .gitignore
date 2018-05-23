@@ -112,3 +112,4 @@ venv.bak/
 /jupyterhub_cookie_secret
 /node_modules/
 /package-lock.json
+xunit-reports/

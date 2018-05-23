@@ -10,12 +10,12 @@ from ewatercycle_experiment_launcher.process import process_notebook
 
 @requires_auth
 def post(request):
-    """Generate hello world notebook and launch it"""
+    """Generate notebook and launch it"""
     return process_notebook(request['notebook'], notebook(request['opendap']))
 
 
 def notebook(opendap) -> NotebookNode:
-    """Generates a Hello world Jupyter notebook"""
+    """Generates a Jupyter notebook"""
     welcome = textwrap.dedent("""
     # Welcome
 
@@ -28,4 +28,3 @@ def notebook(opendap) -> NotebookNode:
         new_code_cell("print(ds)"),
     ]
     return new_notebook(cells=cells, metadata=PY3_META)
-

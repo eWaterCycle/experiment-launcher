@@ -34,4 +34,3 @@ class JupyterHubClient:
         r.raise_for_status()
         nb_url = '{0}/user/{1}/lab/tree/{2}'.format(self.jupyterhub_url, self.username, path)
         return nb_url
-

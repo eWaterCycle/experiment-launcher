@@ -4,11 +4,15 @@ import flask
 from ewatercycle_experiment_launcher.hub import JupyterHubClient
 
 
-def process_notebook(request, notebook):
+def build_client() -> JupyterHubClient:
     token = current_app.config['JUPYTERHUB_TOKEN']
     jupyterhub_url = current_app.config['JUPYTERHUB_URL']
     username = flask.request.authorization.username
-    client = JupyterHubClient(jupyterhub_url, token, username)
+    return JupyterHubClient(jupyterhub_url, token, username)
+
+
+def process_notebook(request, notebook):
+    client = build_client()
 
     client.start_server()
 
