@@ -48,6 +48,24 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
+  /threeclickscience:
+    post:
+      summary: Three clicks to a science usecase
+      parameters:
+        - in: body
+          name: request
+          description: The notebook to create
+          schema:
+            $ref: '#/definitions/ThreeClickScienceRequest'
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/NotebookResponse'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
 definitions:
   NotebookResponse:
     type: object
@@ -79,6 +97,42 @@ definitions:
     required:
       - notebook
       - opendap
+    additionalProperties: false
+  ThreeClickScienceRequest:
+    type: object
+    properties:
+      setup:
+        type: object
+        properties:
+          model:
+            type: string
+            description: Model identifier
+          region:
+            type: string
+            description: Region identifier, eg. hydroshed id
+          period:
+            type: object
+            properties:
+              start:
+                type: string
+                format: date-time
+              end:
+                type: string
+                format: date-time
+            required:
+              - start
+              - end
+            additionalProperties: false
+        required:
+          - model
+          - region
+          - period
+        additionalProperties: false
+      notebook:
+        $ref: '#/definitions/NotebookRequest'
+    required:
+      - notebook
+      - setup
     additionalProperties: false
   NotebookRequest:
     type: object
