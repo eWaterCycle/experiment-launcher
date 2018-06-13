@@ -26,32 +26,24 @@ def notebook(setup) -> NotebookNode:
         new_markdown_cell(welcome),
         new_code_cell('import pandas as pd'),
         new_code_cell('from hymuse.models import {0}'.format(setup['model'])),
-        new_code_cell(textwrap.dedent("""
-            # Construct model
+        new_code_cell(textwrap.dedent("""# Construct model
             model = {0}()
             # Setup model based on region
-            model.region({0})
-            """.format(setup['model'], setup['region'])
+            model.region('{1}')""".format(setup['model'], setup['region'])
         )),
-        new_code_cell(textwrap.dedent("""
-            # Store outlet of each step
+        new_code_cell(textwrap.dedent("""# Store outlet of each step
             outlets = []
             # Run model in daily steps
             steps = pd.date_range(start='{0}', end='{1}', freq='D')
             for step in steps:
               model.evolve_model(step)
-              outlets.append(model.outlet())
-            """.format(setup['period']['start'], setup['period']['end'])
+              outlets.append(model.outlet())""".format(setup['period']['start'], setup['period']['end'])
         )),
-        new_code_cell(textwrap.dedent("""
-            import matplotlib.pyplot as plt
-            plt.ion()
-            """
+        new_code_cell(textwrap.dedent("""import matplotlib.pyplot as plt
+            plt.ion()"""
         )),
-        new_code_cell(textwrap.dedent("""
-            # Plot outlet for each model step
-            plt.plot(steps, outlets)
-        """
+        new_code_cell(textwrap.dedent("""# Plot outlet for each model step
+            plt.plot(steps, outlets)"""
         )),
     ]
     return new_notebook(cells=cells, metadata=PY3_META)
