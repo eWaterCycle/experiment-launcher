@@ -25,25 +25,37 @@ def notebook(setup) -> NotebookNode:
     cells = [
         new_markdown_cell(welcome),
         new_code_cell('import pandas as pd'),
-        new_code_cell('from hymuse.models import {0}'.format(setup['model'])),
+        new_code_cell("""from hymuse.community.{0}.interface import {0}
+        from ewatercycle import parameter_fetcher
+        """.format(setup['model'])),
         new_code_cell(textwrap.dedent("""# Construct model
-            model = {0}()
-            # Setup model based on region
-            model.region('{1}')""".format(setup['model'], setup['region'])
+            model = {0}(hostname="localhost")
+
+            # Setup model based on region,
+            # downloads input files of the region from HydroShare and configure parameters with their paths
+            parameterset = parameter_fetcher(region='{1}', target_model={0})
+            model.parameters.reset_from_memento(parameterset)
+
+            print model.outlets # outlets (set of measurement stations)
+            print model.grid # grid with attributes
+            print model.subsurface_grid # ??
+            print model.state # full state, collection of all grid, sets, not implemented in AMUSE/OMUSE currently""".format(setup['model'], setup['region'])
         )),
         new_code_cell(textwrap.dedent("""# Store outlet of each step
-            outlets = []
+            water_levels = []
             # Run model in daily steps
             steps = pd.date_range(start='{0}', end='{1}', freq='D')
             for step in steps:
               model.evolve_model(step)
-              outlets.append(model.outlet())""".format(setup['period']['start'], setup['period']['end'])
+              outlets.append(model.outlets[0].water_level)
+              
+            write_set_to_file(model.grid,filename, 'netcdf')""".format(setup['period']['start'], setup['period']['end'])
         )),
         new_code_cell(textwrap.dedent("""import matplotlib.pyplot as plt
             plt.ion()"""
         )),
-        new_code_cell(textwrap.dedent("""# Plot outlet for each model step
-            plt.plot(steps, outlets)"""
+        new_code_cell(textwrap.dedent("""# Plot water level at first outlet for each model step
+            plt.plot(steps, water_level)"""
         )),
     ]
     return new_notebook(cells=cells, metadata=PY3_META)
