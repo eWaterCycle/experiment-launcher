@@ -54,3 +54,30 @@ The JupyterHub and Experiment Launcher use local OS accounts for authentication 
 In the Swagger UI you must authorize before trying an operation.
 
 When running on Internet make sure https is enforced so the authentication is secure.
+
+# Adding a new notebook type
+
+The web service has an path for each type of notebook.
+To add a new type of notebook the following steps must be performed:
+
+1. In `ewatercycle_experiment_launcher/swagger.yaml` create a new path
+    * The http method should be POST
+    * The body parameter should be named `request` and have a schema with `notebook` property of type `NotebookRequest`
+    * The response should be 201 or default like all other path responses
+2. In `ewatercycle_experiment_launcher/api` directory create a file with same name as the chosen path +'.py'
+    * Create a `post()` function, using the following template:
+
+```python
+from ewatercycle_experiment_launcher.auth import requires_auth
+from ewatercycle_experiment_launcher.process import process_notebook
+
+@requires_auth
+def post(request):
+    """Generate notebook and launch it
+
+    Args:
+        request: The json POST body as a Python object
+    """
+    nb = ... # <Add code that generates a nbformat.NotebookNode object>
+    return process_notebook(request['notebook'], nb)
+```
