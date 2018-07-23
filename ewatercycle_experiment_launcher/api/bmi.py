@@ -34,21 +34,21 @@ def bmi_notebook(setup) -> NotebookNode:
         new_code_cell('from grpc4bmi.bmi_client_docker import BmiClientDocker'),
         new_code_cell(textwrap.dedent("""\
             # Startup model
-            pcrg = BmiClientDocker(image="{0}", image_port=55555,
+            model = BmiClientDocker(image="{0}", image_port=55555,
                                    input_dir="./input",
                                    output_dir="./output")
-            pcrg.initialize('{1}.cfg')""".format(setup['docker'], setup['parameterset'])
+            model.initialize('{1}.cfg')""".format(setup['docker'], setup['parameterset'])
                                       )),
         new_code_cell(textwrap.dedent("""\
             # Evolve model
-            tstart = pcrg.get_start_time()
-            tstep = pcrg.get_time_step()
-            pcrg.update_until(tstart + {0} * tstep)""".format(setup['step']))),
+            tstart = model.get_start_time()
+            tstep = model.get_time_step()
+            model.update_until(tstart + {0} * tstep)""".format(setup['step']))),
         new_code_cell(textwrap.dedent("""\
             # Plot variable {0}
             variable = '{0}'
-            vals = pcrg.get_value(variable)
-            unit = pcrg.get_var_units(variable)""".format(setup['var2plot'])
+            vals = model.get_value(variable)
+            unit = model.get_var_units(variable)""".format(setup['var2plot'])
                                       )),
         new_code_cell(textwrap.dedent("""\
             import matplotlib.pyplot as plt
@@ -62,6 +62,9 @@ def bmi_notebook(setup) -> NotebookNode:
             plt.colorbar()
             plt.plot()"""
                                       )),
+        new_code_cell(textwrap.dedent("""\
+            # Stop the Docker container
+            del pcrg"""))
     ]
     return new_notebook(cells=cells, metadata=PY3_META)
 
