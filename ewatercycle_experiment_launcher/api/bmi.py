@@ -35,8 +35,8 @@ def bmi_notebook(setup) -> NotebookNode:
         new_code_cell(textwrap.dedent("""\
             # Startup model
             model = BmiClientDocker(image="{0}", image_port=55555,
-                                   input_dir="./input",
-                                   output_dir="./output")
+                                    input_dir="./input",
+                                    output_dir="./output")
             model.initialize('{1}.cfg')""".format(setup['docker'], setup['parameterset'])
                                       )),
         new_code_cell(textwrap.dedent("""\
