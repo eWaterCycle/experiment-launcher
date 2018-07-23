@@ -66,6 +66,24 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
+  /bmi:
+    post:
+      summary: Run model on parameter set using BMI
+      parameters:
+        - in: body
+          name: request
+          description: The notebook to create
+          schema:
+            $ref: '#/definitions/BmiRequest'
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/NotebookResponse'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
 definitions:
   NotebookResponse:
     type: object
@@ -134,6 +152,40 @@ definitions:
       - notebook
       - setup
     additionalProperties: false
+  BmiRequest:
+    type: object
+    required:
+      - notebook
+      - setup
+    additionalProperties: false
+    properties:
+      notebook:
+        $ref: '#/definitions/NotebookRequest'
+      setup:
+        type: object
+        required:
+          - model
+          - parameterset
+          - docker
+          - var2plot
+        additionalProperties: false
+        properties:
+          model:
+            type: string
+            description: Model identifier
+          parameterset:
+            type: string
+            description: Parameter set name
+          docker:
+            type: string
+            description: Docker image name
+          var2plot:
+            type: string
+            description: Variable to plot
+          step:
+            type: integer
+            description: Number of time steps to evolve model
+            default: 100
   NotebookRequest:
     type: object
     required:
