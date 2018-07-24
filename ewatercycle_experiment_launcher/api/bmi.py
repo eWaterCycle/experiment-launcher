@@ -20,7 +20,7 @@ def bmi_notebook(setup) -> NotebookNode:
         """)
     cells = [
         new_markdown_cell(welcome),
-        new_code_cell('from ewatercycle.parametersetdb import Parametersetdb'),
+        new_code_cell('from ewatercycle.parametersetdb import Parametersetdb, models'),
         new_code_cell(textwrap.dedent("""\
             # Prepare input
             parameter_set = Parametersetdb().select(model='{0}', name='{1}')
@@ -34,7 +34,7 @@ def bmi_notebook(setup) -> NotebookNode:
         new_code_cell('from grpc4bmi.bmi_client_docker import BmiClientDocker'),
         new_code_cell(textwrap.dedent("""\
             # Startup model
-            model = BmiClientDocker(image="{0}", image_port=55555,
+            model = BmiClientDocker(image=models['{0}']['docker'], image_port=55555,
                                     input_dir="./input",
                                     output_dir="./output")
             model.initialize('{1}.cfg')""".format(setup['docker'], setup['parameterset'])

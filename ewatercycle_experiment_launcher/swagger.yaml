@@ -176,9 +176,6 @@ definitions:
           parameterset:
             type: string
             description: Parameter set name
-          docker:
-            type: string
-            description: Docker image name
           var2plot:
             type: string
             description: Variable to plot
