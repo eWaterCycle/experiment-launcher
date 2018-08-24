@@ -172,12 +172,15 @@ definitions:
           model:
             type: string
             description: Model identifier
+            example: WALRUS
           parameterset:
             type: string
             description: Parameter set name
+            example: hupsel
           var2plot:
             type: string
             description: Variable to plot
+            example: Q
           step:
             type: integer
             description: Number of time steps to evolve model
@@ -190,6 +193,7 @@ definitions:
       directory:
         type: string
         description: Name of directory inside Jupyter Lab
+        example: somedirectory
       filename:
         type: string
         description: Name of notebook
