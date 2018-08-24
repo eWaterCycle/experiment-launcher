@@ -11,7 +11,8 @@ with open('README.md') as readme_file:
 with open('CHANGELOG.md') as history_file:
     history = history_file.read()
 
-requirements = ['nbformat', 'requests', 'connexion', 'gunicorn', 'decorator', 'simplepam', 'flask-cors']
+requirements = ['nbformat', 'requests', 'connexion', 'gunicorn', 'decorator',
+                'simplepam', 'flask-cors', 'jsonschema==2.6.0']
 
 setup_requirements = ['pytest-runner', ]
 

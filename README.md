@@ -21,13 +21,14 @@ Startup a JupyterHub server running with a service which has a known token and h
 
 ```bash
 pip install jupyterhub dockerspawner
-npm install configurable-http-proxy
+sudo npm install -g configurable-http-proxy
 cp jupyterhub_config.py.example jupyterhub_config.py
 # Generate token
 JUPYTERHUB_TOKEN=$(openssl rand -hex 32)
 echo $JUPYTERHUB_TOKEN
-# Set token 
+# Set token
 nano jupyterhub_config.py
+docker pull ewatercycle/jupyterlab-experiment-builder
 jupyterhub
 ```
 
