@@ -166,7 +166,6 @@ definitions:
         required:
           - model
           - parameterset
-          - docker
           - var2plot
         additionalProperties: false
         properties:

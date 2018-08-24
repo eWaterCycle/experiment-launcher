@@ -34,10 +34,10 @@ def bmi_notebook(setup) -> NotebookNode:
         new_code_cell('from grpc4bmi.bmi_client_docker import BmiClientDocker'),
         new_code_cell(textwrap.dedent("""\
             # Startup model
-            model = BmiClientDocker(image=models['{0}']['docker'], image_port=55555,
+            model = BmiClientDocker(image=models['{0}']['docker'],
                                     input_dir="./input",
                                     output_dir="./output")
-            model.initialize('{1}.cfg')""".format(setup['docker'], setup['parameterset'])
+            model.initialize('{1}.cfg')""".format(setup['model'], setup['parameterset'])
                                       )),
         new_code_cell(textwrap.dedent("""\
             # Evolve model
@@ -64,7 +64,7 @@ def bmi_notebook(setup) -> NotebookNode:
                                       )),
         new_code_cell(textwrap.dedent("""\
             # Stop the Docker container
-            del pcrg"""))
+            del model"""))
     ]
     return new_notebook(cells=cells, metadata=PY3_META)
 
