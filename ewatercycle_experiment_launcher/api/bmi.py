@@ -29,6 +29,23 @@ def bmi_notebook(setup) -> NotebookNode:
         new_code_cell(textwrap.dedent("""\
             # Overwrite items in config file
             # parameter_set.config['...']['...'] = '...'
+            """)),
+        new_code_cell(textwrap.dedent("""\
+            # The model inside a BMI Docker container expects the datafiles in the /data/input directory,
+            # the config file must be adjusted to that
+
+            # For PCR-GLOBWB model the input and output directory must be set with
+            # parameter_set.config['globalOptions']['inputDir'] = '/data/input'
+            # parameter_set.config['globalOptions']['outputDir'] = '/data/output'
+
+            # For wflow model the config file must be set with
+            # parameter_set.config['model']['configfile'] = 'wflow_sbm_ps.ini'
+
+            # For Walrus model the data file must be set with
+            # import os;parameter_set.config['data'] = '/data/input/' + os.listdir('input')[0]
+            """)),
+        new_code_cell(textwrap.dedent("""\
+            # Save config file
             parameter_set.save_config('{0}.cfg')""".format(setup['parameterset'])
                                       )),
         new_code_cell('from grpc4bmi.bmi_client_docker import BmiClientDocker'),
