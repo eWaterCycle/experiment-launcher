@@ -20,11 +20,15 @@ def bmi_notebook(setup) -> NotebookNode:
         """)
     cells = [
         new_markdown_cell(welcome),
-        new_code_cell('from ewatercycle.parametersetdb import Parametersetdb, models'),
+        new_code_cell('from ewatercycle.parametersetdb import ParameterSet, DATAFILES_FORMATS, CONFIG_FORMATS'),
         new_code_cell(textwrap.dedent("""\
             # Prepare input
-            parameter_set = Parametersetdb().select(model='{0}', name='{1}')
-            parameter_set.save_datafiles('./input')""".format(setup['model'], setup['parameterset'])
+            parameter_set = ParameterSet(
+                DATAFILES_FORMATS['{0}']('{1}'),
+                CONFIG_FORMATS['{2}']('{3}')
+            )
+            parameter_set.save_datafiles('./input')""".format(setup['datafiles']['format'], setup['datafiles']['url'],
+                                                              setup['config']['format'], setup['config']['url'])
                                       )),
         new_code_cell(textwrap.dedent("""\
             # Overwrite items in config file
@@ -39,31 +43,29 @@ def bmi_notebook(setup) -> NotebookNode:
             # parameter_set.config['globalOptions']['outputDir'] = '/data/output'
 
             # For wflow model the config file must be set with
-            # parameter_set.config['model']['configfile'] = 'wflow_sbm_ps.ini'
+            # parameter_set.config['model']['configfile'] = /data/input/config.cfg'
 
             # For Walrus model the data file must be set with
             # import os;parameter_set.config['data'] = '/data/input/' + os.listdir('input')[0]
             """)),
         new_code_cell(textwrap.dedent("""\
             # Save config file
-            parameter_set.save_config('{0}.cfg')""".format(setup['parameterset'])
-                                      )),
+            parameter_set.save_config('config.cfg')""")),
         new_code_cell('from grpc4bmi.bmi_client_docker import BmiClientDocker'),
         new_code_cell(textwrap.dedent("""\
             # Startup model
-            model = BmiClientDocker(image=models['{0}']['docker'],
+            model = BmiClientDocker(image={0},
                                     input_dir="./input",
                                     output_dir="./output")
-            model.initialize('{1}.cfg')""".format(setup['model'], setup['parameterset'])
+            model.initialize('config.cfg')""".format(setup['model']['grpc4bmi_container'])
                                       )),
         new_code_cell(textwrap.dedent("""\
             # Evolve model
-            tstart = model.get_start_time()
-            tstep = model.get_time_step()
-            model.update_until(tstart + {0} * tstep)""".format(setup['step']))),
+            tend = model.get_end_time()
+            model.update_until(tend)""")),
         new_code_cell(textwrap.dedent("""\
-            # Plot variable {0}
-            variable = '{0}'
+            # Plot first variable 
+            variable = model.get_output_var_names()[0]
             vals = model.get_value(variable)
             unit = model.get_var_units(variable)""".format(setup['var2plot'])
                                       )),

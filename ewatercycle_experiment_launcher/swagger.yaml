@@ -165,26 +165,44 @@ definitions:
         type: object
         required:
           - model
-          - parameterset
-          - var2plot
+          - datafiles
+          - config
         additionalProperties: false
         properties:
           model:
-            type: string
-            description: Model identifier
-            example: WALRUS
-          parameterset:
-            type: string
-            description: Parameter set name
-            example: hupsel
-          var2plot:
-            type: string
-            description: Variable to plot
-            example: Q
-          step:
-            type: integer
-            description: Number of time steps to evolve model
-            default: 100
+            type: object
+            required:
+              - grpc4bmi_container
+            properties:
+              grpc4bmi_container:
+                type: string
+                example: ewatercycle/pcrg-grpc4bmi:latest
+          datafiles:
+            type: object
+            additionalProperties: false
+            required:
+              - format
+              - url
+            properties:
+              format:
+                type: string
+                example: svn
+              url:
+                type: string
+                example: https://github.com/UU-Hydro/PCR-GLOBWB_input_example/trunk/RhineMeuse30min
+          config:
+            type: object
+            additionalProperties: false
+            required:
+              - format
+              - url
+            properties:
+              format:
+                type: string
+                example: ini
+              url:
+                type: string
+                example: https://raw.githubusercontent.com/UU-Hydro/PCR-GLOBWB_input_example/master/RhineMeuse30min/ini_and_batch_files/rapid/setup_natural_test.ini
   NotebookRequest:
     type: object
     required:
