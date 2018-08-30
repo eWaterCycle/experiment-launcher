@@ -20,15 +20,16 @@ def bmi_notebook(setup) -> NotebookNode:
         """)
     cells = [
         new_markdown_cell(welcome),
-        new_code_cell('from ewatercycle.parametersetdb import ParameterSet, DATAFILES_FORMATS, CONFIG_FORMATS'),
+        new_code_cell('from ewatercycle.parametersetdb import build_from_urls'),
         new_code_cell(textwrap.dedent("""\
             # Prepare input
-            parameter_set = ParameterSet(
-                DATAFILES_FORMATS['{0}']('{1}'),
-                CONFIG_FORMATS['{2}']('{3}')
+            parameter_set = build_from_urls(
+                config_format='{0}', config_url='{1}',
+                datafiles_format='{2}', datafiles_url='{3}',
             )
-            parameter_set.save_datafiles('./input')""".format(setup['datafiles']['format'], setup['datafiles']['url'],
-                                                              setup['config']['format'], setup['config']['url'])
+            parameter_set.save_datafiles('./input')""".format(setup['config']['format'], setup['config']['url'],
+                                                              setup['datafiles']['format'], setup['datafiles']['url'],
+                                                              )
                                       )),
         new_code_cell(textwrap.dedent("""\
             # Overwrite items in config file
@@ -54,7 +55,7 @@ def bmi_notebook(setup) -> NotebookNode:
         new_code_cell('from grpc4bmi.bmi_client_docker import BmiClientDocker'),
         new_code_cell(textwrap.dedent("""\
             # Startup model
-            model = BmiClientDocker(image={0},
+            model = BmiClientDocker(image='{0}',
                                     input_dir="./input",
                                     output_dir="./output")
             model.initialize('config.cfg')""".format(setup['model']['grpc4bmi_container'])
@@ -67,7 +68,7 @@ def bmi_notebook(setup) -> NotebookNode:
             # Plot first variable 
             variable = model.get_output_var_names()[0]
             vals = model.get_value(variable)
-            unit = model.get_var_units(variable)""".format(setup['var2plot'])
+            unit = model.get_var_units(variable)"""
                                       )),
         new_code_cell(textwrap.dedent("""\
             import matplotlib.pyplot as plt
