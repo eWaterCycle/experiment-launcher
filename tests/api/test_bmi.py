@@ -5,11 +5,17 @@ from ewatercycle_experiment_launcher.api.bmi import bmi_notebook
 
 def test_bmi_notebook():
     setup = {
-        'model': 'wflow',
-        'parameterset': 'wflow_rhine_sbm',
-        'docker': 'wflow-grpc4bmi:latest',
-        'var2plot': 'SurfaceRunoff',
-        'step': 100
+        'config': {
+            'format': 'ini',
+            'url': 'https://example.com/config.ini'
+        },
+        'datafiles': {
+            'format': 'svn',
+            'url': 'https://example.com/svn/someproject/trunk'
+        },
+        'model': {
+            'grpc4bmi_container': 'wflow-grpc4bmi:latest',
+        }
     }
     nb = bmi_notebook(setup)
 
