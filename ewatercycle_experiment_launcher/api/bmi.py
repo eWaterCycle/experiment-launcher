@@ -63,12 +63,16 @@ def bmi_notebook(setup) -> NotebookNode:
         new_code_cell(textwrap.dedent("""\
             # Evolve model
             tend = model.get_end_time()
-            model.update_until(tend)""")),
+            var_overtime = []
+            while model.get_current_time() < tend:
+                model.update()
+                var_overtime.append(model.get_value_at_indices('{0}', ({1},)))
+            """.format(setup['plotting']['variable'], setup['plotting']['index']))),
         new_code_cell(textwrap.dedent("""\
             # Plot first variable 
-            variable = model.get_output_var_names()[0]
+            variable = '{0}'
             vals = model.get_value(variable)
-            unit = model.get_var_units(variable)"""
+            unit = model.get_var_units(variable)""".format(setup['plotting']['variable'])
                                       )),
         new_code_cell(textwrap.dedent("""\
             import matplotlib.pyplot as plt
@@ -80,8 +84,9 @@ def bmi_notebook(setup) -> NotebookNode:
             plt.title(variable + '[' + unit + ']')
             plt.pcolormesh(X,Y,Z)
             plt.colorbar()
-            plt.plot()"""
-                                      )),
+            plt.plot()""")),
+        new_code_cell(textwrap.dedent("""\
+            # TODO plot var over time""")),
         new_code_cell(textwrap.dedent("""\
             # Stop the Docker container
             del model"""))
