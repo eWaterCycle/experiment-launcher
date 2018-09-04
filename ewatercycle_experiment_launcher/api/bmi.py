@@ -20,7 +20,8 @@ def bmi_notebook(setup) -> NotebookNode:
         """)
     cells = [
         new_markdown_cell(welcome),
-        new_code_cell('from ewatercycle.parametersetdb import build_from_urls'),
+        new_code_cell(textwrap.dedent("""from ewatercycle.parametersetdb import build_from_urls
+            import numpy as np""")),
         new_code_cell(textwrap.dedent("""\
             # Prepare input
             parameter_set = build_from_urls(
@@ -58,7 +59,7 @@ def bmi_notebook(setup) -> NotebookNode:
             model = BmiClientDocker(image='{0}', image_port=55555,
                                     input_dir="./input",
                                     output_dir="./output")
-            model.initialize('config.cfg')""".format(setup['model']['grpc4bmi_container'])
+            model.initialize('/data/input/config.cfg')""".format(setup['model']['grpc4bmi_container'])
                                       )),
         new_code_cell(textwrap.dedent("""\
             # Evolve model
@@ -66,8 +67,8 @@ def bmi_notebook(setup) -> NotebookNode:
             var_overtime = []
             while model.get_current_time() < tend:
                 model.update()
-                var_at_pixel = model.get_value_at_indices('{0}', ({1},))[0]
-                var_overtime.append((model.get_current_time(), var_at_pixel))
+                value_at_pixel = model.get_value_at_indices('{0}', np.array([{1}]))[0]
+                var_overtime.append((model.get_current_time(), value_at_pixel))
             """.format(setup['plotting']['variable'], setup['plotting']['index']))),
         new_code_cell(textwrap.dedent("""\
             # Plot first variable 

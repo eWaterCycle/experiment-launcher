@@ -214,10 +214,8 @@ definitions:
                 type: string
                 example: discharge
               index:
-                type: array
-                items:
-                  type: number
-                example: [5, 13]
+                type: number
+                example: 86
 
   NotebookRequest:
     type: object
