@@ -14,7 +14,11 @@ def test_bmi_notebook():
             'url': 'https://example.com/svn/someproject/trunk'
         },
         'model': {
-            'grpc4bmi_container': 'wflow-grpc4bmi:latest',
+            'grpc4bmi_container': 'wflow-grpc4bmi:latest'
+        },
+        'plotting': {
+            'variable': 'somevarname',
+            'index': 42
         }
     }
     nb = bmi_notebook(setup)
