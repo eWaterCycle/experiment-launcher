@@ -20,7 +20,8 @@ def bmi_notebook(setup) -> NotebookNode:
         """)
     cells = [
         new_markdown_cell(welcome),
-        new_code_cell(textwrap.dedent("""from ewatercycle.parametersetdb import build_from_urls
+        new_code_cell(textwrap.dedent("""\
+            from ewatercycle.parametersetdb import build_from_urls
             import numpy as np""")),
         new_code_cell(textwrap.dedent("""\
             # Prepare input
