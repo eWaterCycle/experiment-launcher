@@ -63,25 +63,26 @@ def bmi_notebook(setup) -> NotebookNode:
             model.initialize('config.cfg')""".format(setup['model']['grpc4bmi_container'])
                                       )),
         new_code_cell(textwrap.dedent("""\
-            # Evolve model
+            # Evolve model and capture variable {0} at index {1} for each time step
+            variable = '{0}'
+            index_of_variable = np.array([{1}])
+            variable_overtime = []
             tend = model.get_end_time()
-            index_of_var = np.array([{1}])
-            var_overtime = []
             while model.get_current_time() < tend:
                 model.update()
-                value_at_pixel = model.get_value_at_indices('{0}', index_of_var)[0]
-                var_overtime.append((model.get_current_time(), value_at_pixel))
+                value_at_pixel = model.get_value_at_indices(variable, index_of_variable)[0]
+                variable_overtime.append((model.get_current_time(), value_at_pixel))
             """.format(setup['plotting']['variable'], setup['plotting']['index']))),
         new_code_cell(textwrap.dedent("""\
-            # Plot first variable 
-            variable = '{0}'
+            # Plot variable {0}
             vals = model.get_value(variable)
-            unit = model.get_var_units(variable)""".format(setup['plotting']['variable'])
+            unit = model.get_var_units(variable)"""
                                       )),
         new_code_cell(textwrap.dedent("""\
             import matplotlib.pyplot as plt
             import numpy
             import numpy.ma as ma
+
             missval = -999.
             X, Y = numpy.arange(vals.shape[1]), numpy.arange(vals.shape[0])
             Z = ma.masked_where(vals == missval, vals)
@@ -90,7 +91,17 @@ def bmi_notebook(setup) -> NotebookNode:
             plt.colorbar()
             plt.plot()""")),
         new_code_cell(textwrap.dedent("""\
-            # TODO plot var over time""")),
+            # Plot variable {0} at index {1} for each time step
+            import cftime
+            from bokeh.plotting import output_notebook, figure, show
+
+            output_notebook()
+
+            time_unit = model.get_time_units()
+            p = figure(plot_width=800, plot_height=400, x_axis_type="datetime")
+            p.xaxis.axis_label = variable + '[' + unit + ']'
+            p.line([cftime.num2date(d[0], time_unit) for d in variable_overtime], [d[1] for d in variable_overtime] , line_width=2)
+            show(p)""")),
         new_code_cell(textwrap.dedent("""\
             # Stop the Docker container
             del model"""))
