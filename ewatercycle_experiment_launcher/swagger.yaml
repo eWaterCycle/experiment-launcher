@@ -205,22 +205,6 @@ definitions:
               url:
                 type: string
                 example: https://raw.githubusercontent.com/UU-Hydro/PCR-GLOBWB_input_example/master/RhineMeuse30min/ini_and_batch_files/rapid/setup_natural_test.ini
-          plotting:
-            type: object
-            additionalProperties: false
-            required:
-              - variable
-              - index
-            properties:
-              variable:
-                type: string
-                example: discharge
-              index:
-                type: array
-                items:
-                  type: number
-                example: [5, 13]
-
   NotebookRequest:
     type: object
     required:
