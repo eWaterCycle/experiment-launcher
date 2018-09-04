@@ -66,8 +66,8 @@ def bmi_notebook(setup) -> NotebookNode:
             var_overtime = []
             while model.get_current_time() < tend:
                 model.update()
-                thevar = model.get_value_at_indices('{0}', ({1},))
-                var_overtime.append((model.get_current_time(), thevar))
+                var_at_pixel = model.get_value_at_indices('{0}', ({1},))[0]
+                var_overtime.append((model.get_current_time(), var_at_pixel))
             """.format(setup['plotting']['variable'], setup['plotting']['index']))),
         new_code_cell(textwrap.dedent("""\
             # Plot first variable 
