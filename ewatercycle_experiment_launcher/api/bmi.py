@@ -55,7 +55,7 @@ def bmi_notebook(setup) -> NotebookNode:
         new_code_cell('from grpc4bmi.bmi_client_docker import BmiClientDocker'),
         new_code_cell(textwrap.dedent("""\
             # Startup model
-            model = BmiClientDocker(image='{0}',
+            model = BmiClientDocker(image='{0}', image_port=55555,
                                     input_dir="./input",
                                     output_dir="./output")
             model.initialize('config.cfg')""".format(setup['model']['grpc4bmi_container'])
