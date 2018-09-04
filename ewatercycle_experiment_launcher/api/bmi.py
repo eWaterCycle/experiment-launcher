@@ -60,15 +60,16 @@ def bmi_notebook(setup) -> NotebookNode:
             model = BmiClientDocker(image='{0}', image_port=55555,
                                     input_dir="./input",
                                     output_dir="./output")
-            model.initialize('/data/input/config.cfg')""".format(setup['model']['grpc4bmi_container'])
+            model.initialize('config.cfg')""".format(setup['model']['grpc4bmi_container'])
                                       )),
         new_code_cell(textwrap.dedent("""\
             # Evolve model
             tend = model.get_end_time()
+            index_of_var = np.array([{1}])
             var_overtime = []
             while model.get_current_time() < tend:
                 model.update()
-                value_at_pixel = model.get_value_at_indices('{0}', np.array([{1}]))[0]
+                value_at_pixel = model.get_value_at_indices('{0}', index_of_var)[0]
                 var_overtime.append((model.get_current_time(), value_at_pixel))
             """.format(setup['plotting']['variable'], setup['plotting']['index']))),
         new_code_cell(textwrap.dedent("""\
