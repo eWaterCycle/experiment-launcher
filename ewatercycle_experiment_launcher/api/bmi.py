@@ -76,16 +76,16 @@ def bmi_notebook(setup) -> NotebookNode:
         new_code_cell(textwrap.dedent("""\
             # Plot variable {0}
             vals = model.get_value(variable)
-            unit = model.get_var_units(variable)"""
+            unit = model.get_var_units(variable)
+            shape = pcrg.get_grid_shape(pcrg.get_var_grid(variable))"""
                                       )),
         new_code_cell(textwrap.dedent("""\
             import matplotlib.pyplot as plt
             import numpy
             import numpy.ma as ma
 
-            missval = -999.
-            X, Y = numpy.arange(vals.shape[1]), numpy.arange(vals.shape[0])
-            Z = ma.masked_where(vals == missval, vals)
+            X, Y = numpy.arange(shape[1]), numpy.arange(shape[0])
+            Z = numpy.reshape(ma.masked_where(vals == numpy.nan, vals), shape)
             plt.title(variable + '[' + unit + ']')
             plt.pcolormesh(X,Y,Z)
             plt.colorbar()
