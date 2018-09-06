@@ -46,7 +46,8 @@ def bmi_notebook(setup) -> NotebookNode:
             # parameter_set.config['globalOptions']['outputDir'] = '/data/output'
 
             # For wflow model the config file must be set with
-            # parameter_set.config['model']['configfile'] = '/data/input/config.cfg'
+            # parameter_set.config['model']['configfile'] = '/data/input/wflow_sbm.ini'
+            # And replace config.cfg in the next cells with wflow_sbm.ini
 
             # For Walrus model the data file must be set with
             # import os;parameter_set.config['data'] = '/data/input/' + os.listdir('input')[0]
