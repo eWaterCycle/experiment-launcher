@@ -77,7 +77,7 @@ def bmi_notebook(setup) -> NotebookNode:
             # Plot variable {0}
             vals = model.get_value(variable)
             unit = model.get_var_units(variable)
-            shape = pcrg.get_grid_shape(pcrg.get_var_grid(variable))"""
+            shape = model.get_grid_shape(model.get_var_grid(variable))"""
                                       )),
         new_code_cell(textwrap.dedent("""\
             import matplotlib.pyplot as plt
