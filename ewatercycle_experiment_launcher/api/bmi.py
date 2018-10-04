@@ -100,7 +100,7 @@ def bmi_notebook(setup) -> NotebookNode:
 
             time_unit = model.get_time_units()
             p = figure(plot_width=800, plot_height=400, x_axis_type="datetime")
-            p.xaxis.axis_label = variable + '[' + unit + ']'
+            p.yaxis.axis_label = variable + '[' + unit + ']'
             p.line([cftime.num2date(d[0], time_unit) for d in variable_overtime], [d[1] for d in variable_overtime] , line_width=2)
             show(p)""")),
         new_code_cell(textwrap.dedent("""\
