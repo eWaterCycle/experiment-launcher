@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/eWaterCycle/experiment-launcher.svg?branch=master)](https://travis-ci.org/eWaterCycle/experiment-launcher)
 [![SonarCloud quality gate](https://sonarcloud.io/api/project_badges/measure?project=experiment-launcher&metric=alert_status)](https://sonarcloud.io/dashboard?id=experiment-launcher)
 [![SonarCloud coverage](https://sonarcloud.io/api/project_badges/measure?project=experiment-launcher&metric=coverage)](https://sonarcloud.io/component_measures?id=experiment-launcher&metric=coverage)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1453265.svg)](https://doi.org/10.5281/zenodo.1453265)
 
 eWaterCycle Experiment Launcher a webservice to generate and launch a Jupyter notebook.
 
