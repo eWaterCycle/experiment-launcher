@@ -14,6 +14,10 @@ authors:
 cff-version: "1.0.3"
 date-released: 2018-10-09
 doi: 10.5281/zenodo.1453265
+keywords:
+  - webservice
+  - Jupyter notebook
+  - Swagger
 license: Apache-2.0
 message: "If you use this software, please cite it as below."
 repository-code: "https://github.com/eWaterCycle/experiment-launcher"
