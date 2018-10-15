@@ -1,4 +1,23 @@
 {
-    "title": "eWaterCycle Experiment Launcher",
-    "license": "Apache-2.0"
+    "creators": [
+        {
+            "affiliation": "Netherlands eScience Center",
+            "name": "Verhoeven, Stefan",
+            "orcid": "0000-0002-5821-2060"
+        },
+        {
+            "affiliation": "Netherlands eScience Center",
+            "name": "Weel, Berend"
+        }
+    ],
+    "description": "Automated launching of Jupyter notebooks based on parameters and a notebook template.",
+    "keywords": [
+        "webservice",
+        "Jupyter notebook",
+        "Swagger"
+    ],
+    "license": {
+        "id": "Apache-2.0"
+    },
+    "title": "Experiment Launcher"
 }
