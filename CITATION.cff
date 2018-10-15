@@ -1,17 +1,26 @@
 # YAML 1.2
 # Metadata for citation of this software according to the CFF format (https://citation-file-format.github.io/)
-cff-version: 1.0.3
-message: If you use this software, please cite it as below.
-title: eWaterCycle Experiment Launcher
-doi: 10.5281/zenodo.1453265
+---
+abstract: "Automated launching of Jupyter notebooks based on parameters and a notebook template."
 authors:
-- given-names: Stefan
-  family-names: Verhoeven
-  affiliation: Netherlands eScience Center
-- given-names: Berend
-  family-names: Weel
-  affiliation: Netherlands eScience Center
-version: 0.1.0
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: Verhoeven
+    given-names: Stefan
+    orcid: "https://orcid.org/0000-0002-5821-2060"
+  -
+    affiliation: "Netherlands eScience Center"
+    family-names: Weel
+    given-names: Berend
+cff-version: "1.0.3"
 date-released: 2018-10-09
-repository-code: https://github.com/eWaterCycle/experiment-launcher
+doi: 10.5281/zenodo.1453265
+keywords:
+  - webservice
+  - Jupyter notebook
+  - Swagger
 license: Apache-2.0
+message: "If you use this software, please cite it using these metadata."
+repository-code: "https://github.com/eWaterCycle/experiment-launcher"
+title: "Experiment Launcher"
+version: "0.1.0"
