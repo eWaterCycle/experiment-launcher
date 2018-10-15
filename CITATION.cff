@@ -1,6 +1,7 @@
 # YAML 1.2
 # Metadata for citation of this software according to the CFF format (https://citation-file-format.github.io/)
 ---
+abstract: "Automated launching of Jupyter notebooks based on parameters and a notebook template."
 authors:
   -
     affiliation: "Netherlands eScience Center"
