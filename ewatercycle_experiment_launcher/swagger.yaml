@@ -9,8 +9,11 @@ produces:
   - application/json
   - application/problem+json
 securityDefinitions:
-  basic:
+  BasicAuth:
     type: basic
+    x-basicInfoFunc: ewatercycle_experiment_launcher.auth.check_auth
+security:
+  - BasicAuth: []
 paths:
   /hello:
     post:
@@ -84,6 +87,7 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
+
 definitions:
   NotebookResponse:
     type: object

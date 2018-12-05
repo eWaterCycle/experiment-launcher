@@ -70,10 +70,8 @@ To add a new type of notebook the following steps must be performed:
     * Create a `post()` function, using the following template:
 
 ```python
-from ewatercycle_experiment_launcher.auth import requires_auth
 from ewatercycle_experiment_launcher.process import process_notebook
 
-@requires_auth
 def post(request):
     """Generate notebook and launch it
 

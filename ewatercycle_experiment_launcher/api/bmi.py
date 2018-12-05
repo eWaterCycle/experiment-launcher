@@ -3,7 +3,6 @@ import textwrap
 from nbformat import NotebookNode
 from nbformat.v4 import new_markdown_cell, new_code_cell, new_notebook
 
-from ewatercycle_experiment_launcher.auth import requires_auth
 from ewatercycle_experiment_launcher.generate import PY3_META
 from ewatercycle_experiment_launcher.process import process_notebook
 
@@ -110,7 +109,6 @@ def bmi_notebook(setup) -> NotebookNode:
     return new_notebook(cells=cells, metadata=PY3_META)
 
 
-@requires_auth
 def post(request):
     """Generate notebook and launch it
 
