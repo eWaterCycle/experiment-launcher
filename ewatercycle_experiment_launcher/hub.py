@@ -27,10 +27,10 @@ class JupyterHubClient:
         r = self.agent.put(url, json=content)
         r.raise_for_status()
 
-    def upload_notebook(self, notebook, path):
+    def upload_notebook(self, notebook, path, workspace):
         api_url = '{0}/user/{1}/api/contents/{2}'.format(self.jupyterhub_url, self.username, path)
         content = {'type': 'notebook', 'format': 'json', 'content': notebook}
         r = self.agent.put(api_url, json=content)
         r.raise_for_status()
-        nb_url = '{0}/user/{1}/lab/tree/{2}'.format(self.jupyterhub_url, self.username, path)
+        nb_url = '{0}/user/{1}/lab/workspaces/{3}/tree/{2}'.format(self.jupyterhub_url, self.username, path, workspace)
         return nb_url

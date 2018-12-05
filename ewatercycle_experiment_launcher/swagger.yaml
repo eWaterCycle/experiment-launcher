@@ -226,10 +226,18 @@ definitions:
         type: string
         description: Name of directory inside Jupyter Lab
         example: somedirectory
+        minLength: 1
       filename:
         type: string
         description: Name of notebook
         default: experiment.ipynb
+        minLength: 1
+      workspace:
+        type: string
+        description: Name of workspace, if absent will generate random workspace to prevent already in use dialog
+        example: foo
+        minLength: 1
+        pattern: '[^/]'
     additionalProperties: false
   Error:
     type: object

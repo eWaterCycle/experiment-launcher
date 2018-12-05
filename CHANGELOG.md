@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+* workspace is already in use in another JupyterLab window (#11)
+
 ## [0.1.0] - 2019-10-09
 
 Initial release

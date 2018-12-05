@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 from flask import current_app
 import flask
 
@@ -20,5 +22,10 @@ def process_notebook(request, notebook):
     client.create_directory(directory)
 
     path = directory + '/' + request['filename']
-    location = client.upload_notebook(notebook, path)
+
+    if 'workspace' in request:
+        workspace = request['workspace']
+    else:
+        workspace = uuid4().hex
+    location = client.upload_notebook(notebook, path, workspace)
     return {"location": location}

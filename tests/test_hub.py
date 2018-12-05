@@ -81,10 +81,11 @@ class TestUploadNotebook:
         mocked_client.agent.put.return_value = response
         notebook = 'notebook contents'
         path = 'notebook.ipynb'
+        workspace = 'bar'
 
-        nb_url = mocked_client.upload_notebook(notebook, path)
+        nb_url = mocked_client.upload_notebook(notebook, path, workspace)
 
         api_url = 'https://hub.ewatercycle.org/user/myusername/api/contents/notebook.ipynb'
         request_json = {'type': 'notebook', 'format': 'json', 'content': 'notebook contents'}
         mocked_client.agent.put.assert_called_with(api_url, json=request_json)
-        assert nb_url == 'https://hub.ewatercycle.org/user/myusername/lab/tree/notebook.ipynb'
+        assert nb_url == 'https://hub.ewatercycle.org/user/myusername/lab/workspaces/bar/tree/notebook.ipynb'
