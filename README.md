@@ -9,8 +9,6 @@ eWaterCycle Experiment Launcher a webservice to generate and launch a Jupyter no
 
 The API of the webservice is described in OpenAPI specification at [openapi.yaml](https://github.com/eWaterCycle/experiment-launcher/blob/master/ewatercycle_experiment_launcher/swagger.yaml) and can be seen in [Swagger UI](http://petstore.swagger.io/?url=https://raw.githubusercontent.com/eWaterCycle/experiment-launcher/master/ewatercycle_experiment_launcher/openapi.yaml)
 
-See [CONTRIBUTE]
-
 # Install
 
 ## JupyterHub server
