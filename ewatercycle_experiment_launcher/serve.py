@@ -10,5 +10,5 @@ app = connexion.FlaskApp(__name__)
 app.app.config['JUPYTERHUB_TOKEN'] = os.environ['JUPYTERHUB_TOKEN']
 app.app.config['JUPYTERHUB_URL'] = os.environ['JUPYTERHUB_URL']
 resolver = RestyResolver('ewatercycle_experiment_launcher.api')
-app.add_api('swagger.yaml', resolver=resolver, validate_responses=True)
+app.add_api('openapi.yaml', resolver=resolver, validate_responses=True)
 CORS(app.app)

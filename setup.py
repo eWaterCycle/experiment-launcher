@@ -11,7 +11,7 @@ with open('README.md') as readme_file:
 with open('CHANGELOG.md') as history_file:
     history = history_file.read()
 
-requirements = ['nbformat', 'requests', 'connexion', 'connexion[swagger-ui]', 'gunicorn', 'decorator',
+requirements = ['nbformat', 'requests', 'connexion[swagger-ui]', 'connexion', 'gunicorn', 'decorator',
                 'simplepam', 'flask-cors', 'jsonschema==2.6.0']
 
 setup_requirements = ['pytest-runner', ]
@@ -45,6 +45,6 @@ setup(
     version='0.2.0',
     zip_safe=False,
     package_data={
-      'ewatercycle_experiment_launcher': ['swagger.yaml'],
+      'ewatercycle_experiment_launcher': ['openapi.yaml'],
     },
 )
