@@ -63,9 +63,10 @@ The web service has an path for each type of notebook.
 To add a new type of notebook the following steps must be performed:
 
 1. In `ewatercycle_experiment_launcher/swagger.yaml` create a new path
-    * The http method should be POST
-    * The body parameter should be named `request` and have a schema with `notebook` property of type `NotebookRequest`
-    * The response should be 201 or default like all other path responses
+    * The http method should be `post`
+    * The requestBody should be a json object which includes a `notebook` property of schema type `NotebookRequest`
+    * The 200 response should of response type NotebookResponse
+    * The default response should of response type ErrorResponse
 2. In `ewatercycle_experiment_launcher/api` directory create a file with same name as the chosen path +'.py'
     * Create a `post()` function, using the following template:
 
@@ -76,8 +77,10 @@ def post(body):
     """Generate notebook and launch it
 
     Args:
-        body: The json POST body as a Python object
+        body: The json POST body as a Python dictionary
     """
     nb = ... # <Add code that generates a nbformat.NotebookNode object>
     return process_notebook(body['notebook'], nb)
 ```
+
+3. Write unit tests in `tests/api/` directory
