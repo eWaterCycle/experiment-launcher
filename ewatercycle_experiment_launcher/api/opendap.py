@@ -7,9 +7,9 @@ from ewatercycle_experiment_launcher.generate import PY3_META
 from ewatercycle_experiment_launcher.process import process_notebook
 
 
-def post(request):
+def post(body):
     """Generate notebook and launch it"""
-    return process_notebook(request['notebook'], notebook(request['opendap']))
+    return process_notebook(body['notebook'], notebook(body['opendap']))
 
 
 def notebook(opendap) -> NotebookNode:

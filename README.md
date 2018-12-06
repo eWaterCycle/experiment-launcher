@@ -72,12 +72,12 @@ To add a new type of notebook the following steps must be performed:
 ```python
 from ewatercycle_experiment_launcher.process import process_notebook
 
-def post(request):
+def post(body):
     """Generate notebook and launch it
 
     Args:
-        request: The json POST body as a Python object
+        body: The json POST body as a Python object
     """
     nb = ... # <Add code that generates a nbformat.NotebookNode object>
-    return process_notebook(request['notebook'], nb)
+    return process_notebook(body['notebook'], nb)
 ```

@@ -1,266 +1,306 @@
-swagger: '2.0'
+openapi: 3.0.0
 info:
   version: 0.1.0
   title: eWaterCycle Experiment Launcher
   description: Webservice to generate and launch a Jupyter notebook
-consumes:
-  - application/json
-produces:
-  - application/json
-  - application/problem+json
-securityDefinitions:
-  BasicAuth:
-    type: basic
-    x-basicInfoFunc: ewatercycle_experiment_launcher.auth.check_auth
 security:
   - BasicAuth: []
 paths:
   /hello:
     post:
       summary: Notebook that prints Hello World
-      parameters:
-        - in: body
-          name: request
-          description: The notebook to create
-          schema:
-            $ref: '#/definitions/HelloRequest'
       responses:
-        201:
+        '201':
           description: Created
-          schema:
-            $ref: '#/definitions/NotebookResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotebookResponse'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/NotebookResponse'
         default:
           description: Unexpected error
-          schema:
-            $ref: '#/definitions/Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HelloRequest'
+        description: The notebook to create
   /opendap:
     post:
       summary: Notebook that opens an opendap URL with xarray
-      parameters:
-        - in: body
-          name: request
-          description: The notebook to create
-          schema:
-            $ref: '#/definitions/OpendapRequest'
       responses:
-        201:
+        '201':
           description: Created
-          schema:
-            $ref: '#/definitions/NotebookResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotebookResponse'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/NotebookResponse'
         default:
           description: Unexpected error
-          schema:
-            $ref: '#/definitions/Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpendapRequest'
+        description: The notebook to create
   /threeclickscience:
     post:
       summary: Three clicks to a science usecase
-      parameters:
-        - in: body
-          name: request
-          description: The notebook to create
-          schema:
-            $ref: '#/definitions/ThreeClickScienceRequest'
       responses:
-        201:
+        '201':
           description: Created
-          schema:
-            $ref: '#/definitions/NotebookResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotebookResponse'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/NotebookResponse'
         default:
           description: Unexpected error
-          schema:
-            $ref: '#/definitions/Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ThreeClickScienceRequest'
+        description: The notebook to create
   /bmi:
     post:
       summary: Run model on parameter set using BMI
-      parameters:
-        - in: body
-          name: request
-          description: The notebook to create
-          schema:
-            $ref: '#/definitions/BmiRequest'
       responses:
-        201:
+        '201':
           description: Created
-          schema:
-            $ref: '#/definitions/NotebookResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotebookResponse'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/NotebookResponse'
         default:
           description: Unexpected error
-          schema:
-            $ref: '#/definitions/Error'
-
-definitions:
-  NotebookResponse:
-    type: object
-    properties:
-      location:
-        type: string
-        format: uri
-        description: URL of experiment notebook on Jupyter Lab server
-    required:
-    - location
-    additionalProperties: false
-  HelloRequest:
-    type: object
-    properties:
-      notebook:
-        $ref: '#/definitions/NotebookRequest'
-    required:
-      - notebook
-    additionalProperties: false
-  OpendapRequest:
-    type: object
-    properties:
-      opendap:
-        type: string
-        format: uri
-        description: URL of opendap endpoint
-      notebook:
-        $ref: '#/definitions/NotebookRequest'
-    required:
-      - notebook
-      - opendap
-    additionalProperties: false
-  ThreeClickScienceRequest:
-    type: object
-    properties:
-      setup:
-        type: object
-        properties:
-          model:
-            type: string
-            description: Model identifier
-          region:
-            type: string
-            description: Region identifier, eg. hydroshed id
-          period:
-            type: object
-            properties:
-              start:
-                type: string
-                format: date-time
-              end:
-                type: string
-                format: date-time
-            required:
-              - start
-              - end
-            additionalProperties: false
-        required:
-          - model
-          - region
-          - period
-        additionalProperties: false
-      notebook:
-        $ref: '#/definitions/NotebookRequest'
-    required:
-      - notebook
-      - setup
-    additionalProperties: false
-  BmiRequest:
-    type: object
-    required:
-      - notebook
-      - setup
-    additionalProperties: false
-    properties:
-      notebook:
-        $ref: '#/definitions/NotebookRequest'
-      setup:
-        type: object
-        required:
-          - model
-          - datafiles
-          - config
-        additionalProperties: false
-        properties:
-          model:
-            type: object
-            required:
-              - grpc4bmi_container
-            properties:
-              grpc4bmi_container:
-                type: string
-                example: ewatercycle/pcrg-grpc4bmi:latest
-          datafiles:
-            type: object
-            additionalProperties: false
-            required:
-              - format
-              - url
-            properties:
-              format:
-                type: string
-                example: svn
-              url:
-                type: string
-                example: https://github.com/UU-Hydro/PCR-GLOBWB_input_example/trunk/RhineMeuse30min
-          config:
-            type: object
-            additionalProperties: false
-            required:
-              - format
-              - url
-            properties:
-              format:
-                type: string
-                example: ini
-              url:
-                type: string
-                example: https://raw.githubusercontent.com/UU-Hydro/PCR-GLOBWB_input_example/master/RhineMeuse30min/ini_and_batch_files/rapid/setup_natural_test.ini
-          plotting:
-            type: object
-            additionalProperties: false
-            required:
-              - variable
-              - index
-            properties:
-              variable:
-                type: string
-                example: discharge
-              index:
-                type: number
-                example: 86
-
-  NotebookRequest:
-    type: object
-    required:
-      - directory
-    properties:
-      directory:
-        type: string
-        description: Name of directory inside Jupyter Lab
-        example: somedirectory
-        minLength: 1
-      filename:
-        type: string
-        description: Name of notebook
-        default: experiment.ipynb
-        minLength: 1
-      workspace:
-        type: string
-        description: Name of workspace, if absent will generate random workspace to prevent already in use dialog
-        example: foo
-        minLength: 1
-        pattern: '[^/]'
-    additionalProperties: false
-  Error:
-    type: object
-    description: >-
-      Problem Details for HTTP APIs, see
-      https://tools.ietf.org/html/draft-ietf-appsawg-http-problem-00
-    properties:
-      status:
-        type: integer
-        format: int32
-      type:
-        type: string
-      detail:
-        type: string
-      title:
-        type: string
-    required:
-      - status
-      - type
-      - title
-      - detail
-    additionalProperties: false
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BmiRequest'
+        description: The notebook to create
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      x-basicInfoFunc: ewatercycle_experiment_launcher.auth.check_auth
+      scheme: basic
+  schemas:
+    NotebookResponse:
+      type: object
+      properties:
+        location:
+          type: string
+          format: uri
+          description: URL of experiment notebook on Jupyter Lab server
+      required:
+        - location
+      additionalProperties: false
+    HelloRequest:
+      type: object
+      properties:
+        notebook:
+          $ref: '#/components/schemas/NotebookRequest'
+      required:
+        - notebook
+      additionalProperties: false
+    OpendapRequest:
+      type: object
+      properties:
+        opendap:
+          type: string
+          format: uri
+          description: URL of opendap endpoint
+        notebook:
+          $ref: '#/components/schemas/NotebookRequest'
+      required:
+        - notebook
+        - opendap
+      additionalProperties: false
+    ThreeClickScienceRequest:
+      type: object
+      properties:
+        setup:
+          type: object
+          properties:
+            model:
+              type: string
+              description: Model identifier
+            region:
+              type: string
+              description: 'Region identifier, eg. hydroshed id'
+            period:
+              type: object
+              properties:
+                start:
+                  type: string
+                  format: date-time
+                end:
+                  type: string
+                  format: date-time
+              required:
+                - start
+                - end
+              additionalProperties: false
+          required:
+            - model
+            - region
+            - period
+          additionalProperties: false
+        notebook:
+          $ref: '#/components/schemas/NotebookRequest'
+      required:
+        - notebook
+        - setup
+      additionalProperties: false
+    BmiRequest:
+      type: object
+      required:
+        - notebook
+        - setup
+      additionalProperties: false
+      properties:
+        notebook:
+          $ref: '#/components/schemas/NotebookRequest'
+        setup:
+          type: object
+          required:
+            - model
+            - datafiles
+            - config
+          additionalProperties: false
+          properties:
+            model:
+              type: object
+              required:
+                - grpc4bmi_container
+              properties:
+                grpc4bmi_container:
+                  type: string
+                  example: 'ewatercycle/pcrg-grpc4bmi:latest'
+            datafiles:
+              type: object
+              additionalProperties: false
+              required:
+                - format
+                - url
+              properties:
+                format:
+                  type: string
+                  example: svn
+                url:
+                  type: string
+                  example: >-
+                    https://github.com/UU-Hydro/PCR-GLOBWB_input_example/trunk/RhineMeuse30min
+            config:
+              type: object
+              additionalProperties: false
+              required:
+                - format
+                - url
+              properties:
+                format:
+                  type: string
+                  example: ini
+                url:
+                  type: string
+                  example: >-
+                    https://raw.githubusercontent.com/UU-Hydro/PCR-GLOBWB_input_example/master/RhineMeuse30min/ini_and_batch_files/rapid/setup_natural_test.ini
+            plotting:
+              type: object
+              additionalProperties: false
+              required:
+                - variable
+                - index
+              properties:
+                variable:
+                  type: string
+                  example: discharge
+                index:
+                  type: number
+                  example: 86
+    NotebookRequest:
+      type: object
+      required:
+        - directory
+      properties:
+        directory:
+          type: string
+          description: Name of directory inside Jupyter Lab
+          example: somedirectory
+          minLength: 1
+        filename:
+          type: string
+          description: Name of notebook
+          default: experiment.ipynb
+          example: experiment.ipynb
+          minLength: 1
+        workspace:
+          type: string
+          description: >-
+            Name of workspace, if absent will generate random workspace to
+            prevent already in use dialog
+          example: foo
+          minLength: 1
+          pattern: '[^/]'
+      additionalProperties: false
+    Error:
+      type: object
+      description: >-
+        Problem Details for HTTP APIs, see
+        https://tools.ietf.org/html/draft-ietf-appsawg-http-problem-00
+      properties:
+        status:
+          type: integer
+          format: int32
+        type:
+          type: string
+        detail:
+          type: string
+        title:
+          type: string
+      required:
+        - status
+        - type
+        - title
+        - detail
+      additionalProperties: false

@@ -109,11 +109,11 @@ def bmi_notebook(setup) -> NotebookNode:
     return new_notebook(cells=cells, metadata=PY3_META)
 
 
-def post(request):
+def post(body):
     """Generate notebook and launch it
 
     Args:
-        request: The json POST body as a Python object
+        body: The json POST body as a Python object
     """
-    nb = bmi_notebook(request['setup'])
-    return process_notebook(request['notebook'], nb)
+    nb = bmi_notebook(body['setup'])
+    return process_notebook(body['notebook'], nb)
