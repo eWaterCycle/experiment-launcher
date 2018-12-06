@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 * workspace is already in use in another JupyterLab window (#11)
 
+### Changed
+
+* Upgraded to Connexion v2
+* Upgraded to OpenAPI v3
+
 ## [0.1.0] - 2019-10-09
 
 Initial release
