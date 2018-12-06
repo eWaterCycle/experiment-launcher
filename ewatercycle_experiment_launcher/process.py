@@ -1,8 +1,9 @@
+from typing import Dict
 from uuid import uuid4
 
 import connexion
 from flask import current_app
-
+from nbformat import NotebookNode
 
 from ewatercycle_experiment_launcher.hub import JupyterHubClient
 
@@ -14,8 +15,9 @@ def build_client() -> JupyterHubClient:
     return JupyterHubClient(jupyterhub_url, token, username)
 
 
-def process_notebook(request, notebook):
-    client = build_client()
+def process_notebook(request: Dict[str, str], notebook: NotebookNode, client: JupyterHubClient=None) -> Dict[str, str]:
+    if client is None:
+        client = build_client()
 
     client.start_server()
 
