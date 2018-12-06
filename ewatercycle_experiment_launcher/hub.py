@@ -5,14 +5,14 @@ from requests import RequestException
 
 class JupyterHubCommunicationError(ProblemException):
     def __init__(self, cause):
-        super().__init__(status=502,
+        super().__init__(status=500,
                          title='Failed to communicate with Jupyter Hub api',
                          detail=str(cause))
 
 
 class JupyterCommunicationError(ProblemException):
     def __init__(self, cause):
-        super().__init__(status=502,
+        super().__init__(status=500,
                          title='Failed to communicate with Jupyter Notebook server api',
                          detail=str(cause))
 
