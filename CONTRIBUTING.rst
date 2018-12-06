@@ -1,5 +1,3 @@
-.. highlight:: shell
-
 ============
 Contributing
 ============
@@ -54,6 +52,39 @@ If you are proposing a feature:
 * Remember that this is a volunteer-driven project, and that contributions
   are welcome :)
 
+
+Adding a new notebook type
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The web service has an path for each type of notebook.
+
+To add a new type of notebook the following steps must be performed:
+
+1. In `ewatercycle_experiment_launcher/openapi.yaml` file create a new path
+    * The http method should be `post`
+    * The requestBody should be a json object which includes a `notebook` property of schema type `NotebookRequest`
+    * The 200 response should of response type NotebookResponse
+    * The default response should of response type ErrorResponse
+2. In `ewatercycle_experiment_launcher/api` directory create a file with same name as the chosen path +'.py'
+    * Create a `post()` function, using the following template
+
+.. code-block:: python
+
+        from ewatercycle_experiment_launcher.process import process_notebook
+
+        def post(body):
+            """Generate notebook and launch it
+
+            Args:
+                body: The json POST body as a Python dictionary
+            """
+            nb = ... # <Add code that generates a nbformat.NotebookNode object>
+            return process_notebook(body['notebook'], nb)
+
+3. Write unit tests in `tests/api/` directory
+
+Make a Pull Request after the new notebook type has been implemented and tested.
+
 Get Started!
 ------------
 
@@ -106,23 +137,26 @@ Before you submit a pull request, check that it meets these guidelines:
    https://travis-ci.org/ewatercycle/ewatercycle_experiment_launcher/pull_requests
    and make sure that the tests pass for all supported Python versions.
 
-Tips
-----
+Release
+-------
 
-To run a subset of tests::
+A reminder for the maintainers on how to release a new version.
 
-$ py.test tests.test_ewatercycle_experiment_launcher
+1. Make sure tests pass by running::
 
+    $ pytest
 
-Deploying
----------
+2. Bump the version by running::
 
-A reminder for the maintainers on how to deploy.
-Make sure all your changes are committed (including an entry in HISTORY.rst).
-Then run::
+    $ bumpversion patch # possible: major / minor / patch
 
-$ bumpversion patch # possible: major / minor / patch
-$ git push
-$ git push --tags
+3. Update or create an entry for the new version in the `CHANGELOG.md` file
+4. Make sure all your changes are committed and pushed
+5. Publish to pypi with::
 
-Travis will then deploy to PyPI if tests pass.
+    $ rm -rf dist
+    $ python setup.py sdist bdist_wheel
+    $ twine upload dist/*
+
+6. Create GitHub release
+7. Update DOI in `CITATION.cff` file

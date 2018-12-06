@@ -15,4 +15,3 @@ addons:
     organization: ewatercycle
 after_success:
  - sonar-scanner -Dsonar.login=$SONAR_TOKEN
-
