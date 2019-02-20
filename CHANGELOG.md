@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+* BASE_PATH env var to overwrite base path (#15)
+
 ## [0.2.0] - 2018-12-06
 
 ### Fixed
