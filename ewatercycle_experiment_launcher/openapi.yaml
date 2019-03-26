@@ -62,14 +62,14 @@ paths:
           $ref: '#/components/responses/NotebookResponse'
         default:
           $ref: '#/components/responses/ErrorResponse'
-  /assesment:
+  /assessment:
     post:
       summary: Run model on parameter set using BMI with an model assesment against a GRDC station
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AssesmentRequest'
+              $ref: '#/components/schemas/AssessmentRequest'
         description: The notebook to create
       responses:
         '200':
@@ -278,7 +278,7 @@ components:
                 index:
                   type: number
                   example: 86
-    AssesmentRequest:
+    AssessmentRequest:
       type: object
       required:
         - notebook
@@ -293,7 +293,7 @@ components:
             - model
             - datafiles
             - config
-            - assesment
+            - assessment
           additionalProperties: false
           properties:
             model:
@@ -332,13 +332,14 @@ components:
                   type: string
                   example: >-
                     https://raw.githubusercontent.com/UU-Hydro/PCR-GLOBWB_input_example/master/RhineMeuse30min/ini_and_batch_files/rapid/setup_natural_test.ini
-            assesment:
+            assessment:
               type: object
               additionalProperties: false
               required:
                 - variable
                 - index
-                - grdc_station_number
+                - source
+                - station_number
               properties:
                 variable:
                   type: string
@@ -346,8 +347,14 @@ components:
                   example: discharge
                 index:
                   type: number
-                  description: Index in the <variable> array (retrieved with bmi_model.get_value(<variable>)) that corresponds with the location of the GRDC station.
+                  description: Index in the <variable> array (retrieved with bmi_model.get_value(<variable>)) that corresponds with the location of the observation station.
                   example: 86
-                grdc_station_number:
+                source:
+                  description: Source of observations
+                  type: string
+                  enum: [grdc, usgs]
+                  default: grdc
+                station_number:
+                  description: Station identifier for the selected source of observations.
                   type: number
                   example: 6970500

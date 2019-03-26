@@ -7,7 +7,7 @@ from ewatercycle_experiment_launcher.generate import PY3_META
 from ewatercycle_experiment_launcher.process import process_notebook
 
 
-def assesment_notebook(setup) -> NotebookNode:
+def assessment_notebook(setup) -> NotebookNode:
     """Generates a Jupyter notebook"""
     welcome = textwrap.dedent("""
             # Welcome
@@ -91,6 +91,7 @@ def assesment_notebook(setup) -> NotebookNode:
                     plt.pcolormesh(X,Y,Z)
                     plt.colorbar()
                     plt.plot()""")),
+        # TODO replace plot below with usgs|grdc station download and hydrograph plot
         new_code_cell(textwrap.dedent("""\
                     # Plot variable {0} at index {1} for each time step
                     import cftime
