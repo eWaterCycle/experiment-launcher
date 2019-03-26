@@ -37,24 +37,54 @@ def assessment_notebook(setup) -> NotebookNode:
                     # Overwrite items in config file
                     # parameter_set.config['...']['...'] = '...'
                     """)),
-        new_code_cell(textwrap.dedent("""\
-                    # The model inside a BMI Docker container expects the datafiles in the /data/input directory,
-                    # the config file must be adjusted to that
-    
-                    # For PCR-GLOBWB model the input and output directory must be set with
-                    # parameter_set.config['globalOptions']['inputDir'] = '/data/input'
-                    # parameter_set.config['globalOptions']['outputDir'] = '/data/output'
-    
-                    # For wflow model the config file must be set with
-                    # parameter_set.config['model']['configfile'] = '/data/input/wflow_sbm.ini'
-                    # And replace config.cfg in the next cells with wflow_sbm.ini
-    
-                    # For Walrus model the data file must be set with
-                    # import os;parameter_set.config['data'] = '/data/input/' + os.listdir('input')[0]
-                    """)),
-        new_code_cell(textwrap.dedent("""\
-                    # Save config file
-                    parameter_set.save_config('config.cfg')""")),
+    ]
+
+    model_name = setup['model']['name']
+    if model_name == 'wflow':
+        cells += [
+            new_code_cell(textwrap.dedent("""\
+                # The model inside a BMI Docker container expects the datafiles in the /data/input directory,
+                # the config file must be adjusted to that
+
+                # For wflow model the config file must be set with
+                parameter_set.config['model']['configfile'] = '/data/input/wflow_sbm.ini'
+                """)),
+        ]
+    elif model_name == 'Walrus':
+        cells += [
+            new_code_cell(textwrap.dedent("""\
+                # The model inside a BMI Docker container expects the datafiles in the /data/input directory,
+                # the config file must be adjusted to that
+
+                # For Walrus model the data file must be set with
+                import os
+                parameter_set.config['data'] = '/data/input/' + os.listdir('input')[0]
+                """)),
+        ]
+    elif model_name == 'PCR-GLOBWB':
+        cells += [
+            new_code_cell(textwrap.dedent("""\
+                # The model inside a BMI Docker container expects the datafiles in the /data/input directory,
+                # the config file must be adjusted to that
+
+                # For PCR-GLOBWB model the input and output directory must be set with
+                parameter_set.config['globalOptions']['inputDir'] = '/data/input'
+                parameter_set.config['globalOptions']['outputDir'] = '/data/output'
+                """)),
+        ]
+    if model_name == 'wflow':
+        cells += [
+            new_code_cell(textwrap.dedent("""\
+                    # Save config file as expected by wflow
+                    parameter_set.save_config('wflow_sbm.ini')""")),
+        ]
+    else:
+        cells += [
+            new_code_cell(textwrap.dedent("""\
+                        # Save config file
+                        parameter_set.save_config('config.cfg')""")),
+        ]
+    cells += [
         new_code_cell('from grpc4bmi.bmi_client_docker import BmiClientDocker'),
         new_code_cell(textwrap.dedent("""\
                     # Startup model
@@ -73,7 +103,7 @@ def assessment_notebook(setup) -> NotebookNode:
                         model.update()
                         value_at_pixel = model.get_value_at_indices(variable, index_of_variable)[0]
                         variable_overtime.append((model.get_current_time(), value_at_pixel))
-                    """.format(setup['plotting']['variable'], setup['plotting']['index']))),
+                    """.format(setup['assessment']['variable'], setup['assessment']['index']))),
         new_code_cell(textwrap.dedent("""\
                     # Plot variable {0}
                     vals = model.get_value(variable)
@@ -91,7 +121,21 @@ def assessment_notebook(setup) -> NotebookNode:
                     plt.pcolormesh(X,Y,Z)
                     plt.colorbar()
                     plt.plot()""")),
-        # TODO replace plot below with usgs|grdc station download and hydrograph plot
+    ]
+    assessment_source = setup['assessment']['source']
+    station_number = setup['assessment']['station_number']
+    if assessment_source == 'grdc':
+        cells += [
+            # TODO perform grdc station download
+
+        ]
+    elif assessment_source == 'usgs':
+        cells += [
+            # TODO perform usgs station download
+        ]
+
+    # TODO replace plot with hydrograph plot from hydrostats package
+    cells += [
         new_code_cell(textwrap.dedent("""\
                     # Plot variable {0} at index {1} for each time step
                     import cftime
@@ -118,5 +162,5 @@ def post(body):
     Args:
         body: The json POST body as a Python object
     """
-    nb = assesment_notebook(body['setup'])
+    nb = assessment_notebook(body['setup'])
     return process_notebook(body['notebook'], nb)

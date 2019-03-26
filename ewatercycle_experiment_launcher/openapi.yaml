@@ -299,8 +299,13 @@ components:
             model:
               type: object
               required:
+                - name
                 - grpc4bmi_container
               properties:
+                name:
+                  type: string
+                  description: Name of model
+                  example: PCR-GLOBWB
                 grpc4bmi_container:
                   type: string
                   example: 'ewatercycle/pcrg-grpc4bmi:latest'
