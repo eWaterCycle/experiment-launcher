@@ -344,7 +344,7 @@ components:
                 - variable
                 - index
                 - source
-                - station_number
+                - station_id
               properties:
                 variable:
                   type: string
@@ -359,7 +359,7 @@ components:
                   type: string
                   enum: [grdc, usgs]
                   default: grdc
-                station_number:
+                station_id:
                   description: Station identifier for the selected source of observations.
-                  type: number
-                  example: 6970500
+                  type: string
+                  example: '6970500'

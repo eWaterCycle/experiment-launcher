@@ -123,7 +123,7 @@ def assessment_notebook(setup) -> NotebookNode:
                     plt.plot()""")),
     ]
     assessment_source = setup['assessment']['source']
-    station_number = setup['assessment']['station_number']
+    station_id = setup['assessment']['station_id']
     if assessment_source == 'grdc':
         cells += [
             # TODO perform grdc station download
