@@ -64,7 +64,7 @@ paths:
           $ref: '#/components/responses/ErrorResponse'
   /assessment:
     post:
-      summary: Run model on parameter set using BMI with an model assesment against a GRDC station
+      summary: Run model on parameter set using BMI with an model assesment against an observation station
       requestBody:
         content:
           application/json:
