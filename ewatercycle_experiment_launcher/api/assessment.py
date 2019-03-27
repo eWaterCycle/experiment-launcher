@@ -21,8 +21,14 @@ def assessment_notebook(setup) -> NotebookNode:
     cells = [
         new_markdown_cell(welcome),
         new_code_cell(textwrap.dedent("""\
+                    import numpy.ma as ma
+                    import numpy as np
+                    import matplotlib.pyplot as plt
+                    import cftime
+                    from bokeh.plotting import output_notebook, figure, show
+
                     from ewatercycle.parametersetdb import build_from_urls
-                    import numpy as np""")),
+                    from grpc4bmi.bmi_client_docker import BmiClientDocker""")),
         new_code_cell(textwrap.dedent("""\
                     # Prepare input
                     parameter_set = build_from_urls(
@@ -42,14 +48,16 @@ def assessment_notebook(setup) -> NotebookNode:
     ]
 
     model_name = setup['model']['name']
+    config_fn = 'config.cfg'
     if model_name == 'wflow':
+        config_fn = 'wflow_sbm.ini'
         cells += [
             new_code_cell(textwrap.dedent("""\
                 # The model inside a BMI Docker container expects the datafiles in the /data/input directory,
                 # the config file must be adjusted to that
 
                 # For wflow model the config file must be set with
-                parameter_set.config['model']['configfile'] = '/data/input/wflow_sbm.ini'""")),
+                parameter_set.config['model']['configfile'] = '/data/input/{0}'""".format(config_fn))),
         ]
     elif model_name == 'Walrus':
         cells += [
@@ -71,26 +79,16 @@ def assessment_notebook(setup) -> NotebookNode:
                 parameter_set.config['globalOptions']['inputDir'] = '/data/input'
                 parameter_set.config['globalOptions']['outputDir'] = '/data/output'""")),
         ]
-    if model_name == 'wflow':
-        cells += [
-            new_code_cell(textwrap.dedent("""\
-                    # Save config file as expected by wflow
-                    parameter_set.save_config('wflow_sbm.ini')""")),
-        ]
-    else:
-        cells += [
-            new_code_cell(textwrap.dedent("""\
-                        # Save config file
-                        parameter_set.save_config('config.cfg')""")),
-        ]
     cells += [
-        new_code_cell('from grpc4bmi.bmi_client_docker import BmiClientDocker'),
+        new_code_cell(textwrap.dedent("""\
+                    # Save config file
+                    parameter_set.save_config('{0}')""".format(config_fn))),
         new_code_cell(textwrap.dedent("""\
                     # Startup model
                     model = BmiClientDocker(image='{0}', image_port=55555,
                                             input_dir="./input",
                                             output_dir="./output")
-                    model.initialize('config.cfg')""".format(setup['model']['grpc4bmi_container'])
+                    model.initialize('{1}')""".format(setup['model']['grpc4bmi_container'], config_fn)
                                       )),
         new_code_cell(textwrap.dedent("""\
                     # Evolve model and capture variable {0} at index {1} for each time step
@@ -110,12 +108,8 @@ def assessment_notebook(setup) -> NotebookNode:
                     shape = model.get_grid_shape(model.get_var_grid(variable))"""
                                       )),
         new_code_cell(textwrap.dedent("""\
-                    import matplotlib.pyplot as plt
-                    import numpy
-                    import numpy.ma as ma
-    
-                    X, Y = numpy.arange(shape[1]), numpy.arange(shape[0])
-                    Z = numpy.reshape(ma.masked_where(vals == numpy.nan, vals), shape)
+                    X, Y = np.arange(shape[1]), np.arange(shape[0])
+                    Z = np.reshape(ma.masked_where(vals == np.nan, vals), shape)
                     plt.title(variable + '[' + unit + ']')
                     plt.pcolormesh(X,Y,Z)
                     plt.colorbar()
@@ -137,9 +131,6 @@ def assessment_notebook(setup) -> NotebookNode:
     cells += [
         new_code_cell(textwrap.dedent("""\
                     # Plot variable {0} at index {1} for each time step
-                    import cftime
-                    from bokeh.plotting import output_notebook, figure, show
-    
                     output_notebook()
     
                     time_unit = model.get_time_units()
