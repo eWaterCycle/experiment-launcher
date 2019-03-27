@@ -79,6 +79,7 @@ def assessment_notebook(setup) -> NotebookNode:
                 parameter_set.config['globalOptions']['inputDir'] = '/data/input'
                 parameter_set.config['globalOptions']['outputDir'] = '/data/output'""")),
         ]
+    station_id = setup['assessment']['station_id']
     cells += [
         new_code_cell(textwrap.dedent("""\
                     # Save config file
@@ -113,31 +114,46 @@ def assessment_notebook(setup) -> NotebookNode:
                     plt.pcolormesh(X,Y,Z)
                     plt.colorbar()
                     plt.plot()""")),
+        new_code_cell(textwrap.dedent("""\
+            station_id = '{0}'
+            tstart = model.get_start_time()
+            time_unit = model.get_time_units()""".format(station_id)))
     ]
     assessment_source = setup['assessment']['source']
-    station_id = setup['assessment']['station_id']
     if assessment_source == 'grdc':
         cells += [
-            # TODO perform grdc station download
-
+            new_code_cell(textwrap.dedent("""\
+                from ewatercycle.observation.grdc import get_grdc_data
+                observations = get_grdc_data(
+                    station_id,
+                    str(cftime.num2date(tstart, time_unit).date),
+                    str(cftime.num2date(tend, time_unit).date)
+                )
+                """)),
         ]
     elif assessment_source == 'usgs':
         cells += [
-            # TODO perform usgs station download
+            new_code_cell(textwrap.dedent("""\
+                from ewatercycle.observation.usgs import get_usgs_data
+                observations = get_usgs_data(
+                    station_id,
+                    str(cftime.num2date(tstart, time_unit).date),
+                    str(cftime.num2date(tend, time_unit).date)
+                )
+                """)),
         ]
 
     # TODO replace plot with hydrograph plot from hydrostats package
     cells += [
         new_code_cell(textwrap.dedent("""\
-                    station_id = '{0}'
-                    # Plot variable {1} at index {2} for each time step
+                    # Plot variable {0} at index {1} for each time step
                     output_notebook()
     
                     time_unit = model.get_time_units()
                     p = figure(plot_width=800, plot_height=400, x_axis_type="datetime")
                     p.yaxis.axis_label = variable + '[' + unit + ']'
                     p.line([cftime.num2date(d[0], time_unit) for d in variable_overtime], [d[1] for d in variable_overtime] , line_width=2)
-                    show(p)""".format(station_id, setup['assessment']['variable'], setup['assessment']['index']))),
+                    show(p)""".format(setup['assessment']['variable'], setup['assessment']['index']))),
         new_code_cell(textwrap.dedent("""\
                     # Stop the Docker container
                     del model"""))
