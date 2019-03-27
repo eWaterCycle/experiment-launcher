@@ -21,7 +21,7 @@ def test_bmi_notebook():
             'variable': 'somevarname',
             'index': 42,
             'source': 'grdc',
-            'station_number': 6970500
+            'station_id': '6970500'
         }
     }
     nb = assessment_notebook(setup)
