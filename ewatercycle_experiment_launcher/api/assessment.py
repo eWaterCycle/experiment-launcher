@@ -102,11 +102,10 @@ def assessment_notebook(setup) -> NotebookNode:
                         variable_overtime.append((model.get_current_time(), value_at_pixel))
                     """.format(setup['assessment']['variable'], setup['assessment']['index']))),
         new_code_cell(textwrap.dedent("""\
-                    # Plot variable {0}
+                    # Plot variable {0} on last time step
                     vals = model.get_value(variable)
                     unit = model.get_var_units(variable)
-                    shape = model.get_grid_shape(model.get_var_grid(variable))"""
-                                      )),
+                    shape = model.get_grid_shape(model.get_var_grid(variable))""".format(setup['assessment']['variable']))),
         new_code_cell(textwrap.dedent("""\
                     X, Y = np.arange(shape[1]), np.arange(shape[0])
                     Z = np.reshape(ma.masked_where(vals == np.nan, vals), shape)
@@ -130,14 +129,15 @@ def assessment_notebook(setup) -> NotebookNode:
     # TODO replace plot with hydrograph plot from hydrostats package
     cells += [
         new_code_cell(textwrap.dedent("""\
-                    # Plot variable {0} at index {1} for each time step
+                    station_id = '{0}'
+                    # Plot variable {1} at index {2} for each time step
                     output_notebook()
     
                     time_unit = model.get_time_units()
                     p = figure(plot_width=800, plot_height=400, x_axis_type="datetime")
                     p.yaxis.axis_label = variable + '[' + unit + ']'
                     p.line([cftime.num2date(d[0], time_unit) for d in variable_overtime], [d[1] for d in variable_overtime] , line_width=2)
-                    show(p)""")),
+                    show(p)""".format(station_id, setup['assessment']['variable'], setup['assessment']['index']))),
         new_code_cell(textwrap.dedent("""\
                     # Stop the Docker container
                     del model"""))
