@@ -28,11 +28,15 @@ def assessment_notebook(setup) -> NotebookNode:
                         config_format='{0}', config_url='{1}',
                         datafiles_format='{2}', datafiles_url='{3}',
                     )
-                    parameter_set.save_datafiles('./input')""".format(setup['config']['format'], setup['config']['url'],
+                    """.format(setup['config']['format'], setup['config']['url'],
                                                                       setup['datafiles']['format'],
                                                                       setup['datafiles']['url'],
                                                                       )
                                       )),
+        new_code_cell(textwrap.dedent("""\
+                    # Store data files on disk
+                    parameter_set.save_datafiles('./input')
+                    """)),
         new_code_cell(textwrap.dedent("""\
                     # Overwrite items in config file
                     # parameter_set.config['...']['...'] = '...'
