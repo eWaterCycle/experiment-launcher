@@ -118,9 +118,9 @@ def assessment_notebook(setup) -> NotebookNode:
             variable_overtime = []""".format(setup['assessment']['variable'], setup['assessment']['index']))),
         new_code_cell(textwrap.dedent("""\
             while model.get_current_time() < tend:
-            model.update()
-            value_at_pixel = model.get_value_at_indices(variable, pixel_index)[0]
-            variable_overtime.append((model.get_current_time(), value_at_pixel))""")),
+                model.update()
+                value_at_pixel = model.get_value_at_indices(variable, pixel_index)[0]
+                variable_overtime.append((model.get_current_time(), value_at_pixel))""")),
         new_markdown_cell(textwrap.dedent("""\
             ## **Visualizing the output**
             
