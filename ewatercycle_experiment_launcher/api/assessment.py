@@ -168,7 +168,7 @@ def assessment_notebook(setup) -> NotebookNode:
         cells += [
             new_code_cell(textwrap.dedent("""\
                 station_id = '{0}' 
-                observations = get_usgs_data(station_id, str(dstart), str(dend))""").format(station_id)),
+                observations = get_grdc_data(station_id, str(dstart), str(dend))""").format(station_id)),
         ]
     elif assessment_source == 'usgs':
         cells += [
