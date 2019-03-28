@@ -115,7 +115,7 @@ def assessment_notebook(setup) -> NotebookNode:
         new_code_cell(textwrap.dedent("""\
             variable = '{0}'
             pixel_index = np.array([{1}])
-            variable_overtime = []""".format(setup['assessment']['variable'], setup['assessment']['index'])))
+            variable_overtime = []""".format(setup['assessment']['variable'], setup['assessment']['index']))),
         new_code_cell(textwrap.dedent("""\
             while model.get_current_time() < tend:
             model.update()
@@ -131,9 +131,9 @@ def assessment_notebook(setup) -> NotebookNode:
             vals = model.get_value(variable)
             unit = model.get_var_units(variable)
             shape = model.get_grid_shape(model.get_var_grid(variable))
-            grid_index = model.get_grid_id(variable)
-            lon = model.get_grid_x(grid_index)
-            lat = model.get_grid_y(grid_index)
+            grid_id = model.get_var_grid(variable)
+            lon = model.get_grid_x(grid_id)
+            lat = model.get_grid_y(grid_id)
             current_date = cftime.num2date(model.get_current_time(),tunit).date()""")),
         new_markdown_cell('Reshape the one dimensional list of values to a two dimensional array for plotting and make the plot'),
         new_code_cell(textwrap.dedent("""\
