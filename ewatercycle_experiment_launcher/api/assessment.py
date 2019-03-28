@@ -16,7 +16,7 @@ def assessment_notebook(setup) -> NotebookNode:
         
         We will use GRDC data for comparison between the model simulation and the observations.
         
-        In this example notebook we run a hydrology model using [grpc4bmi](https://github.com/eWaterCycle/grpc4bmi), but you can also choose to run your own model, WFLOW or Walrus.
+        In this example notebook we run a hydrology model using [grpc4bmi](https://github.com/eWaterCycle/grpc4bmi).
         """)
     assessment_source = setup['assessment']['source']
     observation_import = 'from ewatercycle.observation.grdc import get_grdc_data'
