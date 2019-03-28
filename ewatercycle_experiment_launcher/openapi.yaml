@@ -62,6 +62,20 @@ paths:
           $ref: '#/components/responses/NotebookResponse'
         default:
           $ref: '#/components/responses/ErrorResponse'
+  /assessment:
+    post:
+      summary: Run model on parameter set using BMI with an model assesment against an observation station
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssessmentRequest'
+        description: The notebook to create
+      responses:
+        '200':
+          $ref: '#/components/responses/NotebookResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
 components:
   securitySchemes:
     BasicAuth:
@@ -264,3 +278,88 @@ components:
                 index:
                   type: number
                   example: 86
+    AssessmentRequest:
+      type: object
+      required:
+        - notebook
+        - setup
+      additionalProperties: false
+      properties:
+        notebook:
+          $ref: '#/components/schemas/NotebookRequest'
+        setup:
+          type: object
+          required:
+            - model
+            - datafiles
+            - config
+            - assessment
+          additionalProperties: false
+          properties:
+            model:
+              type: object
+              required:
+                - name
+                - grpc4bmi_container
+              properties:
+                name:
+                  type: string
+                  description: Name of model
+                  example: PCR-GLOBWB
+                grpc4bmi_container:
+                  type: string
+                  example: 'ewatercycle/pcrg-grpc4bmi:latest'
+            datafiles:
+              type: object
+              additionalProperties: false
+              required:
+                - format
+                - url
+              properties:
+                format:
+                  type: string
+                  example: svn
+                url:
+                  type: string
+                  example: >-
+                    https://github.com/UU-Hydro/PCR-GLOBWB_input_example/trunk/RhineMeuse30min
+            config:
+              type: object
+              additionalProperties: false
+              required:
+                - format
+                - url
+              properties:
+                format:
+                  type: string
+                  example: ini
+                url:
+                  type: string
+                  example: >-
+                    https://raw.githubusercontent.com/UU-Hydro/PCR-GLOBWB_input_example/master/RhineMeuse30min/ini_and_batch_files/rapid/setup_natural_test.ini
+            assessment:
+              type: object
+              additionalProperties: false
+              required:
+                - variable
+                - index
+                - source
+                - station_id
+              properties:
+                variable:
+                  type: string
+                  description: Name of output variable of bmi model used for assesment
+                  example: discharge
+                index:
+                  type: number
+                  description: Index in the <variable> array (retrieved with bmi_model.get_value(<variable>)) that corresponds with the location of the observation station.
+                  example: 86
+                source:
+                  description: Source of observations
+                  type: string
+                  enum: [grdc, usgs]
+                  default: grdc
+                station_id:
+                  description: Station identifier for the selected source of observations.
+                  type: string
+                  example: '6970500'
