@@ -131,8 +131,9 @@ def assessment_notebook(setup) -> NotebookNode:
             vals = model.get_value(variable)
             unit = model.get_var_units(variable)
             shape = model.get_grid_shape(model.get_var_grid(variable))
-            lon = model.get_grid_x(0)
-            lat = model.get_grid_y(0)
+            grid_index = model.get_grid_id(variable)
+            lon = model.get_grid_x(grid_index)
+            lat = model.get_grid_y(grid_index)
             current_date = cftime.num2date(model.get_current_time(),tunit).date()""")),
         new_markdown_cell('Reshape the one dimensional list of values to a two dimensional array for plotting and make the plot'),
         new_code_cell(textwrap.dedent("""\
