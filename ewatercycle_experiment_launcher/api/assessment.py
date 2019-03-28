@@ -76,7 +76,6 @@ def assessment_notebook(setup) -> NotebookNode:
         cells += [
             new_markdown_cell('For **Walrus** model the data file must be set with'),
             new_code_cell(textwrap.dedent("""\
-                import os
                 parameter_set.config['data'] = '/data/input/' + os.listdir('input')[0]""")),
         ]
     elif model_name == 'PCR-GLOBWB':
