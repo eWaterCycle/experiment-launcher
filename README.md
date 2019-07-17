@@ -13,23 +13,38 @@ The API of the webservice is described in OpenAPI specification at [openapi.yaml
 
 ## JupyterHub server
 
-The experiment launcher needs to communicate with a Jupyter Hub server.
-The JupyterHub server must running with a service which has a known token and has admin rights.
+The experiment launcher requires a JupyterHub server.
+
+JupyterHub can be installed with the following commands
+```bash
+pip3 install jupyterhub jupyterlab
+sudo npm install -g configurable-http-proxy
+```
+
+JupyterHub must accept calls from the experiment launcher service to start a notebook server for any hub user and upload a notebook.
+In the JupyterHub configuration file (jupyterhub_config.py) you must register the experiment launcher as a service with admin permissions and a token which the launcher must use to communicate with JupyterHub.
+
+The token (shared secret) for the launcher can be generated with
 
 ```bash
-pip install jupyterhub dockerspawner
-sudo npm install -g configurable-http-proxy
+openssl rand -hex 32
+```
+
+A JupyterHub config file can be made using the [./jupyterhub_config.py.example](jupyterhub_config.py.example) file with
+
+```bash
 cp jupyterhub_config.py.example jupyterhub_config.py
-# Generate token
-export JUPYTERHUB_TOKEN=$(openssl rand -hex 32)
-echo $JUPYTERHUB_TOKEN
-# Set token
+# Put the generated token in the config file
 nano jupyterhub_config.py
-docker pull ewatercycle/jupyterlab-experiment-builder
+```
+
+JupyterHub can be started with
+
+```bash
 jupyterhub
 ```
 
-Test JupyterHub by going to http://172.17.0.1:8000 and login with OS credentials.
+Test JupyterHub by going to http://localhost:8000 and login with your OS credentials.
 
 ## Installation for production
 
@@ -47,19 +62,22 @@ python setup.py develop
 
 # Run
 
+The launcher must be given the same token as configured in the JupyterHub config file.
+
 ```bash
-# JUPYTERHUB_TOKEN env var should be set to same value as token in jupyterhub_config.py
-export JUPYTERHUB_URL=http://172.17.0.1:8000
+# Use token from jupyterhub_config.py
+export JUPYTERHUB_TOKEN=$(python -c "from traitlets.config import Application;print([s['api_token'] for s in  next(Application._load_config_files('jupyterhub_config'))['JupyterHub']['services'] if s['name'] == 'experiment-launcher'][0])")
+export JUPYTERHUB_URL=http://localhost:8000
 gunicorn -w 4 -b 0.0.0.0:8888 ewatercycle_experiment_launcher.serve:app
 ```
 
 Goto http://localhost:8888/ui/ for Swagger UI.
 
-The JupyterHub and Experiment Launcher use local OS accounts for authentication and authorization.
+The JupyterHub and Experiment Launcher both use local OS accounts for authentication and authorization.
 
 In the Swagger UI you must authorize before trying an operation.
 
 When running on Internet make sure https is enforced so the authentication is secure.
 
 The webservice by default runs on `/` base path. This can be changed by setting the `BASE_PATH` environment variable.
-For example `export BASE_PATH=/launcher` will host the Swagger UI on http://localhost:8888/launcher/ui/ .
+For example `export BASE_PATH=launcher/` will host the Swagger UI on http://localhost:8888/launcher/ui/ .
