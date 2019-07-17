@@ -84,4 +84,4 @@ In the Swagger UI you must authorize before trying an operation.
 When running on Internet make sure https is enforced so the authentication is secure.
 
 The webservice by default runs on `/` base path. This can be changed by setting the `BASE_PATH` environment variable.
-For example `export BASE_PATH=launcher/` will host the Swagger UI on http://localhost:8888/launcher/ui/ .
+For example `export BASE_PATH=/launcher` will host the Swagger UI on http://localhost:8888/launcher/ui/ .
