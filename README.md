@@ -34,7 +34,11 @@ A JupyterHub config file can be made using the [./jupyterhub_config.py.example](
 
 ```bash
 cp jupyterhub_config.py.example jupyterhub_config.py
-# Put the generated token in the config file
+```
+
+Put the generated token in the config file by editing it with your favourite editor
+
+```bash
 nano jupyterhub_config.py
 ```
 

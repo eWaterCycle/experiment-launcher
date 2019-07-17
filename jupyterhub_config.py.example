@@ -4,6 +4,6 @@ c.JupyterHub.services = [
      {
          'name': 'experiment-launcher',
          'admin': True,
-         'api_token': '<replace me with a random string, for example generated with `openssl rand -hex 32`',
+         'api_token': '<replace me with a random string, for example generated with `openssl rand -hex 32`>',
      }
 ]
