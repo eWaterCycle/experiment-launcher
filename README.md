@@ -70,7 +70,10 @@ The launcher must be given the same token as configured in the JupyterHub config
 
 ```bash
 # Use token from jupyterhub_config.py
-export JUPYTERHUB_TOKEN=$(python -c "from traitlets.config import Application;print([s['api_token'] for s in  next(Application._load_config_files('jupyterhub_config'))['JupyterHub']['services'] if s['name'] == 'experiment-launcher'][0])")
+export JUPYTERHUB_TOKEN=$(python -c "from traitlets.config import Application;\
+    print([s['api_token'] for s in \
+    next(Application._load_config_files('jupyterhub_config'))['JupyterHub']['services'] \
+    if s['name'] == 'experiment-launcher'][0])")
 export JUPYTERHUB_URL=http://localhost:8000
 gunicorn -w 4 -b 0.0.0.0:8888 ewatercycle_experiment_launcher.serve:app
 ```
