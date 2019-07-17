@@ -12,7 +12,7 @@ with open('CHANGELOG.md') as history_file:
     history = history_file.read()
 
 requirements = ['nbformat', 'requests', 'connexion[swagger-ui]', 'connexion', 'gunicorn', 'decorator',
-                'simplepam', 'flask-cors', 'jsonschema==2.6.0']
+                'simplepam', 'flask-cors']
 
 setup_requirements = ['pytest-runner', ]
 
