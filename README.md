@@ -11,6 +11,8 @@ The API of the webservice is described in OpenAPI specification at [openapi.yaml
 
 # Install
 
+Instructions below have been tested on Linux, but should also work on OSX and Windows Subsystem for Linux.
+
 ## JupyterHub server
 
 The experiment launcher requires a JupyterHub server.
