@@ -1,8 +1,10 @@
 # experiment-launcher
 
+[![Python application](https://github.com/eWaterCycle/experiment-launcher/actions/workflows/python-app.yml/badge.svg)](https://github.com/eWaterCycle/experiment-launcher/actions/workflows/python-app.yml)
 [![SonarCloud quality gate](https://sonarcloud.io/api/project_badges/measure?project=experiment-launcher&metric=alert_status)](https://sonarcloud.io/dashboard?id=experiment-launcher)
 [![SonarCloud coverage](https://sonarcloud.io/api/project_badges/measure?project=experiment-launcher&metric=coverage)](https://sonarcloud.io/component_measures?id=experiment-launcher&metric=coverage)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1453264.svg)](https://doi.org/10.5281/zenodo.1453264)
+[![fair-software.eu](https://img.shields.io/badge/fair--software.eu-%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8B%20%20%E2%97%8F%20%20%E2%97%8B-orange)](https://fair-software.eu)
 
 eWaterCycle Experiment Launcher a webservice to generate and launch a Jupyter notebook.
 
