@@ -3,6 +3,7 @@ from uuid import uuid4
 
 import connexion
 from flask import current_app
+from flask import request
 from nbformat import NotebookNode
 
 from ewatercycle_experiment_launcher.hub import JupyterHubClient
@@ -11,6 +12,8 @@ from ewatercycle_experiment_launcher.hub import JupyterHubClient
 def build_client() -> JupyterHubClient:
     token = current_app.config['JUPYTERHUB_TOKEN']
     jupyterhub_url = current_app.config['JUPYTERHUB_URL']
+    if jupyterhub_url.startswith('/') and request.origin:
+        jupyterhub_url = request.origin + jupyterhub_url
     username = connexion.context['user']
     return JupyterHubClient(jupyterhub_url, token, username)
 
