@@ -18,7 +18,8 @@ def build_client() -> JupyterHubClient:
     return JupyterHubClient(jupyterhub_url, token, username)
 
 
-def process_notebook(request: Dict[str, str], notebook: NotebookNode, client: JupyterHubClient=None) -> Dict[str, str]:
+def process_notebook(request: Dict[str, str], notebook: NotebookNode, client: JupyterHubClient = None) -> Dict[
+        str, str]:
     if client is None:
         client = build_client()
 
@@ -29,9 +30,6 @@ def process_notebook(request: Dict[str, str], notebook: NotebookNode, client: Ju
 
     path = directory + '/' + request['filename']
 
-    if 'workspace' in request:
-        workspace = request['workspace']
-    else:
-        workspace = uuid4().hex
+    workspace = request.get('workspace', uuid4().hex)
     location = client.upload_notebook(notebook, path, workspace)
     return {"location": location}

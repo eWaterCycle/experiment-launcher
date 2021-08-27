@@ -4,8 +4,19 @@ info:
   title: eWaterCycle Experiment Launcher
   description: Webservice to generate and launch a Jupyter notebook
 security:
-  - BasicAuth: []
+  - jwt: [ 'secret' ]
 paths:
+  /auth:
+    post:
+      summary: Authenicate and return JWT token
+      operationId: ewatercycle_experiment_launcher.auth.generate_token
+      security:
+        - BasicAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/AuthResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
   /hello:
     post:
       summary: Notebook that prints Hello World
@@ -38,9 +49,20 @@ components:
   securitySchemes:
     BasicAuth:
       type: http
-      x-basicInfoFunc: ewatercycle_experiment_launcher.auth.check_auth
+      x-basicInfoFunc: ewatercycle_experiment_launcher.auth.check_basic_auth
       scheme: basic
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: ewatercycle_experiment_launcher.auth.decode_token
   responses:
+      AuthResponse:
+          description: Successfully authenticated
+          content:
+              application/json:
+                  schema:
+                    $ref: '#/components/schemas/AuthResponse'
       NotebookResponse:
           description: Started Jupyter server and created notebook
           content:
@@ -54,6 +76,14 @@ components:
                   schema:
                       $ref: '#/components/schemas/Error'
   schemas:
+    AuthResponse:
+      type: object
+      required:
+        - token
+      properties:
+        token:
+          type: string
+      additionalProperties: false
     NotebookRequest:
       type: object
       required:
