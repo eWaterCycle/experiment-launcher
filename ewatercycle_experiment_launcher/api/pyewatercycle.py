@@ -38,6 +38,11 @@ def notebook(setup) -> NotebookNode:
             """)),
         ]
     if 'forcing' in setup:
+        forcing = setup['forcing']
+        if not forcing.startswith('/'):
+            # TODO make forcing_root_dir configurable
+            forcing_root_dir = '/mnt/data/forcing'
+            forcing = forcing_root_dir + '/' + forcing
         cells += [
             new_markdown_cell('## Load forcing data'),
             # TODO prepend a root dir to forcing dir
