@@ -69,14 +69,19 @@ pip install -r requirements_dev.txt
 
 # Run
 
-The launcher must be given the same token as configured in the JupyterHub config file.
+The launcher must be given the same token as configured in the JupyterHub config file as `JUPYTERHUB_TOKEN` environment variable. To get it you can use following oneliner:
 
 ```bash
 # Use token from jupyterhub_config.py
-export JUPYTERHUB_TOKEN=$(python -c "from traitlets.config import Application;\
+export JUPYTERHUB_TOKEN=$(python3 -c "from traitlets.config import Application;\
     print([s['api_token'] for s in \
-    next(Application._load_config_files('jupyterhub_config'))['JupyterHub']['services'] \
+    next(Application._load_config_files('jupyterhub_config'))[0]['JupyterHub']['services'] \
     if s['name'] == 'experiment-launcher'][0])")
+```
+
+To start launcher use
+
+```bash
 # JUPYTERHUB_URL is URL where JupyterHub is running. If path like `/jupyter` then origin header is appended.
 export JUPYTERHUB_URL=http://172.17.0.1:8000
 gunicorn -w 4 -b 0.0.0.0:8888 ewatercycle_experiment_launcher.serve:app
