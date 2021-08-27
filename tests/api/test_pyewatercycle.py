@@ -20,6 +20,7 @@ def test_notebook_pcrglobwb():
     assert isinstance(nb, NotebookNode)
     assert len(nb['cells']) == 20
 
+
 def test_notebook_pcrglobwb_with_forcing():
     setup = {
         "model": {
@@ -37,6 +38,7 @@ def test_notebook_pcrglobwb_with_forcing():
 
     assert isinstance(nb, NotebookNode)
     assert len(nb['cells']) == 22
+
 
 def test_notebook_pcrglobwb_with_location():
     setup = {
@@ -59,6 +61,7 @@ def test_notebook_pcrglobwb_with_location():
     assert isinstance(nb, NotebookNode)
     assert len(nb['cells']) == 20
 
+
 def test_notebook_marrmotm01():
     setup = {
         "model": {
@@ -76,6 +79,7 @@ def test_notebook_marrmotm01():
 
     assert isinstance(nb, NotebookNode)
     assert len(nb['cells']) == 18
+
 
 def test_notebook_marrmotm01_without_forcing():
     setup = {
