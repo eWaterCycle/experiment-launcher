@@ -46,8 +46,6 @@ def notebook(setup) -> NotebookNode:
                 forcing\
             """)),
         ]
-    if 'parameter_set' not in setup and 'forcing' not in setup:
-        raise KeyError('Missing parameter_set or forcing')
 
     cells += [
         new_markdown_cell('## Setting up the model'),
@@ -67,10 +65,16 @@ def notebook(setup) -> NotebookNode:
                 model = ewatercycle.models.{model_name}(version="{model_version}", forcing=forcing)\
             """)),
         ]
-    else:
+    elif 'parameter_set' in setup:
         cells += [
             new_code_cell(textwrap.dedent(f"""\
                 model = ewatercycle.models.{model_name}(version="{model_version}", parameter_set=parameter_set)\
+            """)),
+        ]
+    else:
+        cells += [
+            new_code_cell(textwrap.dedent(f"""\
+                model = ewatercycle.models.{model_name}(version="{model_version}")\
             """)),
         ]
 
