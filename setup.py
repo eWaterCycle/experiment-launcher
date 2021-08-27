@@ -14,9 +14,6 @@ with open('CHANGELOG.md') as history_file:
 requirements = ['nbformat', 'requests', 'connexion[swagger-ui]', 'connexion', 'gunicorn', 'decorator',
                 'simplepam', 'flask-cors', 'jsonschema==3.2.0']
 
-setup_requirements = ['pytest-runner', ]
-
-test_requirements = ['pytest', 'coverage', 'pytest-cov']
 
 setup(
     author="Stefan Verhoeven",
@@ -40,9 +37,7 @@ setup(
     keywords='ewatercycle_experiment_launcher',
     name='ewatercycle_experiment_launcher',
     packages=find_packages(),
-    setup_requires=setup_requirements,
     test_suite='tests',
-    tests_require=test_requirements,
     url='https://github.com/ewatercycle/ewatercycle_experiment_launcher',
     version='0.2.0',
     zip_safe=False,

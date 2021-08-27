@@ -64,7 +64,7 @@ pip install ewatercycle_experiment_launcher
 To install the launcher in development mode clone the repo and run
 
 ```bash
-python setup.py develop
+pip install -r requirements_dev.txt
 ```
 
 # Run
