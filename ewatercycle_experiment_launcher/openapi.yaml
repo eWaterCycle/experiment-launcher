@@ -390,7 +390,8 @@ components:
           type: object
           required:
             - model
-            - assessment
+            - variable
+            - observation
           additionalProperties: false
           properties:
             model:
@@ -405,7 +406,12 @@ components:
                   example: PCRGlobWB
                 version:
                   type: string
+                  description: Version of model to use
                   example: setters
+                lumped:
+                  type: boolean
+                  description: Whether model is lumped or non-lumped model
+                  default: false
               additionalProperties: false
             forcing:
                 type: string
@@ -415,37 +421,31 @@ components:
                 type: string
                 description: Name of pararmeter set. Should be one of names returned by `ewatercycle.parameter_sets.available_parameter_sets()`.
                 example: 'pcrglobwb_rhinemeuse_30min'
-            assessment:
+            variable:
+                type: string
+                description: Name of output variable of model used for assessment
+                example: discharge
+            observation:
               type: object
               additionalProperties: false
               required:
-                - variable
-                - model_station_location
-                - source
                 - station_id
               properties:
-                variable:
+                station_id:
+                  description: GRCD observation station identifier.
                   type: string
-                  description: Name of output variable of model used for assesment
-                  example: discharge
-                model_station_location:
+                  example: '6335020'
+                model_location:
                   type: object
-                  description: Location which matches model outlet pixel closest to observation station.
+                  description: Location which matches model outlet pixel closest to observation station. If not given then uses exact location of station.
                   properties:
                     longitude:
                         type: number
+                        example: 6.395395
                     latitude:
                         type: number
+                        example: 51.756918
                   required:
                     - longitude
                     - latitude
                   additionalProperties: false
-                source:
-                  description: Source of observations
-                  type: string
-                  enum: [grdc, usgs]
-                  default: grdc
-                station_id:
-                  description: Station identifier for the selected source of observations.
-                  type: string
-                  example: '6335020'
