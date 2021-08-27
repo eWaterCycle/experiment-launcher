@@ -64,7 +64,7 @@ paths:
           $ref: '#/components/responses/ErrorResponse'
   /assessment:
     post:
-      summary: Run model on parameter set using BMI with an model assesment against an observation station
+      summary: Run model on parameter set using BMI with an model assessment against an observation station
       requestBody:
         content:
           application/json:
@@ -78,7 +78,7 @@ paths:
           $ref: '#/components/responses/ErrorResponse'
   /pyewatercycle:
     post:
-      summary: Run model on parameter set and forcing using eWatercycle Python package with an model assesment against an observation station
+      summary: Run model on parameter set and forcing using eWatercycle Python package with hydrograph against an GRDC observation station
       requestBody:
         content:
           application/json:
@@ -362,7 +362,7 @@ components:
               properties:
                 variable:
                   type: string
-                  description: Name of output variable of bmi model used for assesment
+                  description: Name of output variable of bmi model used for assessment
                   example: discharge
                 index:
                   type: number
