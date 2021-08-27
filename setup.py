@@ -12,7 +12,7 @@ with open('CHANGELOG.md') as history_file:
     history = history_file.read()
 
 requirements = ['nbformat', 'requests', 'connexion[swagger-ui]', 'connexion', 'gunicorn', 'decorator',
-                'simplepam', 'flask-cors']
+                'simplepam', 'flask-cors', 'jsonschema==3.2.0']
 
 setup_requirements = ['pytest-runner', ]
 
@@ -29,6 +29,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.8',
     ],
     description="Webservice to generate and launch a Jupyter notebook",
     install_requires=requirements,

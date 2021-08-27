@@ -1,9 +1,10 @@
 # experiment-launcher
 
-[![Build Status](https://travis-ci.org/eWaterCycle/experiment-launcher.svg?branch=master)](https://travis-ci.org/eWaterCycle/experiment-launcher)
+[![Python application](https://github.com/eWaterCycle/experiment-launcher/actions/workflows/python-app.yml/badge.svg)](https://github.com/eWaterCycle/experiment-launcher/actions/workflows/python-app.yml)
 [![SonarCloud quality gate](https://sonarcloud.io/api/project_badges/measure?project=experiment-launcher&metric=alert_status)](https://sonarcloud.io/dashboard?id=experiment-launcher)
 [![SonarCloud coverage](https://sonarcloud.io/api/project_badges/measure?project=experiment-launcher&metric=coverage)](https://sonarcloud.io/component_measures?id=experiment-launcher&metric=coverage)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1453264.svg)](https://doi.org/10.5281/zenodo.1453264)
+[![fair-software.eu](https://img.shields.io/badge/fair--software.eu-%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8B%20%20%E2%97%8F%20%20%E2%97%8B-orange)](https://fair-software.eu)
 
 eWaterCycle Experiment Launcher a webservice to generate and launch a Jupyter notebook.
 
@@ -76,7 +77,8 @@ export JUPYTERHUB_TOKEN=$(python -c "from traitlets.config import Application;\
     print([s['api_token'] for s in \
     next(Application._load_config_files('jupyterhub_config'))['JupyterHub']['services'] \
     if s['name'] == 'experiment-launcher'][0])")
-export JUPYTERHUB_URL=http://localhost:8000
+# JUPYTERHUB_URL is URL where JupyterHub is running. If path like `/jupyter` then origin header is appended.
+export JUPYTERHUB_URL=http://172.17.0.1:8000
 gunicorn -w 4 -b 0.0.0.0:8888 ewatercycle_experiment_launcher.serve:app
 ```
 

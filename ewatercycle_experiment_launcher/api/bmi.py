@@ -20,6 +20,8 @@ def bmi_notebook(setup) -> NotebookNode:
     cells = [
         new_markdown_cell(welcome),
         new_code_cell(textwrap.dedent("""\
+            from os.path import abspath
+            from os import mkdir, listdir
             from ewatercycle.parametersetdb import build_from_urls
             import numpy as np""")),
         new_code_cell(textwrap.dedent("""\
@@ -28,7 +30,10 @@ def bmi_notebook(setup) -> NotebookNode:
                 config_format='{0}', config_url='{1}',
                 datafiles_format='{2}', datafiles_url='{3}',
             )
-            parameter_set.save_datafiles('./input')""".format(setup['config']['format'], setup['config']['url'],
+            input_dir = abspath('./input')
+            output_dir = abspath('./output')
+            mkdir(output_dir)
+            parameter_set.save_datafiles(input_dir)""".format(setup['config']['format'], setup['config']['url'],
                                                               setup['datafiles']['format'], setup['datafiles']['url'],
                                                               )
                                       )),
@@ -41,15 +46,15 @@ def bmi_notebook(setup) -> NotebookNode:
             # the config file must be adjusted to that
 
             # For PCR-GLOBWB model the input and output directory must be set with
-            # parameter_set.config['globalOptions']['inputDir'] = '/data/input'
-            # parameter_set.config['globalOptions']['outputDir'] = '/data/output'
+            # parameter_set.config['globalOptions']['inputDir'] = input_dir
+            # parameter_set.config['globalOptions']['outputDir'] = output_dir
 
             # For wflow model the config file must be set with
-            # parameter_set.config['model']['configfile'] = '/data/input/wflow_sbm.ini'
+            # parameter_set.config['model']['configfile'] = input_dir + '/wflow_sbm.ini'
             # And replace config.cfg in the next cells with wflow_sbm.ini
 
             # For Walrus model the data file must be set with
-            # import os;parameter_set.config['data'] = '/data/input/' + os.listdir('input')[0]
+            # import os;parameter_set.config['data'] = input_dir + '/' + listdir(input_dir)[0]
             """)),
         new_code_cell(textwrap.dedent("""\
             # Save config file
@@ -58,8 +63,8 @@ def bmi_notebook(setup) -> NotebookNode:
         new_code_cell(textwrap.dedent("""\
             # Startup model
             model = BmiClientDocker(image='{0}', image_port=55555,
-                                    input_dir="./input",
-                                    output_dir="./output")
+                                    input_dirs=[input_dir],
+                                    work_dir=".")
             model.initialize('config.cfg')""".format(setup['model']['grpc4bmi_container'])
                                       )),
         new_code_cell(textwrap.dedent("""\
