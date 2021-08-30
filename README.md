@@ -86,6 +86,8 @@ To start launcher use
 export JUPYTERHUB_URL=http://172.17.0.1:8000
 # JWT_SECRET is secret with which JWT tokens are encoded/decoded
 export JWT_SECRET=$(openssl rand -hex 32)
+# Root directory where read only forcings can be found
+export FORCING_ROOT_DIR=/mnt/data/forcing
 gunicorn -w 4 -b 0.0.0.0:8888 ewatercycle_experiment_launcher.serve:app
 ```
 

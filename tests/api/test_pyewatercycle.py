@@ -15,10 +15,10 @@ def test_notebook_pcrglobwb():
         "parameter_set": "pcrglobwb_rhinemeuse_30min",
         "variable": "discharge"
     }
-    nb = notebook(setup)
+    nb = notebook(setup, '/mnt/data/forcing')
 
     assert isinstance(nb, NotebookNode)
-    assert len(nb['cells']) == 20
+    assert len(nb['cells']) == 25
 
 
 def test_notebook_pcrglobwb_with_forcing():
@@ -34,10 +34,10 @@ def test_notebook_pcrglobwb_with_forcing():
         "forcing": "pcrglobwb_ERA5_1990-1990_rhinemeuse",
         "variable": "discharge"
     }
-    nb = notebook(setup)
+    nb = notebook(setup, '/mnt/data/forcing')
 
     assert isinstance(nb, NotebookNode)
-    assert len(nb['cells']) == 22
+    assert len(nb['cells']) == 27
 
 
 def test_notebook_pcrglobwb_with_location():
@@ -56,10 +56,10 @@ def test_notebook_pcrglobwb_with_location():
         "parameter_set": "pcrglobwb_rhinemeuse_30min",
         "variable": "discharge"
     }
-    nb = notebook(setup)
+    nb = notebook(setup, '/mnt/data/forcing')
 
     assert isinstance(nb, NotebookNode)
-    assert len(nb['cells']) == 20
+    assert len(nb['cells']) == 25
 
 
 def test_notebook_marrmotm01():
@@ -75,10 +75,10 @@ def test_notebook_marrmotm01():
         "forcing": "marrmot-m01_example_1989-1992_buffalo-river",
         "variable": "flux_out_Q"
     }
-    nb = notebook(setup)
+    nb = notebook(setup, '/mnt/data/forcing')
 
     assert isinstance(nb, NotebookNode)
-    assert len(nb['cells']) == 18
+    assert len(nb['cells']) == 23
 
 
 def test_notebook_marrmotm01_without_forcing():
@@ -93,7 +93,7 @@ def test_notebook_marrmotm01_without_forcing():
         },
         "variable": "flux_out_Q"
     }
-    nb = notebook(setup)
+    nb = notebook(setup, '/mnt/data/forcing')
 
     assert isinstance(nb, NotebookNode)
-    assert len(nb['cells']) == 16
+    assert len(nb['cells']) == 21

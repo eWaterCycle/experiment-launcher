@@ -17,7 +17,8 @@ def app():
         'TESTING': True,
         'JUPYTERHUB_TOKEN': 'somejhtoken',
         'JUPYTERHUB_URL': 'https://localhost:8000',
-        'JWT_SECRET': 'somejwtsecret'
+        'JWT_SECRET': 'somejwtsecret',
+        'FORCING_ROOT_DIR': '/data/forcing',
     })
 
 

@@ -12,6 +12,7 @@ def create_app(test_config=None):
         app.app.config['JUPYTERHUB_TOKEN'] = os.environ['JUPYTERHUB_TOKEN']
         app.app.config['JUPYTERHUB_URL'] = os.environ['JUPYTERHUB_URL']
         app.app.config['JWT_SECRET'] = os.environ['JWT_SECRET']
+        app.app.config['FORCING_ROOT_DIR'] =  os.environ.get('FORCING_ROOT_DIR', '/mnt/data/forcing')
     else:
         app.app.config.update(test_config)
 
