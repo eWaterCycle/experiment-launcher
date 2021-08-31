@@ -10,7 +10,8 @@ from ewatercycle_experiment_launcher.process import process_notebook
 
 def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
     """Generates a Jupyter notebook"""
-    welcome = textwrap.dedent("""
+    welcome = textwrap.dedent(
+        """
         ![image](https://github.com/eWaterCycle/ewatercycle/raw/main/docs/examples/logo.png)
 
         # Welcome to the eWaterCycle experiment notebook
@@ -20,96 +21,133 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
         We will use GRDC data for comparison between the model simulation and the observations.
 
         In this example notebook we run a hydrology model using [ewayercycle](https://github.com/eWaterCycle/ewatercycle).
-        """)
+        """
+    )
     cells = [
         new_markdown_cell(welcome),
-        new_code_cell(textwrap.dedent("""\
+        new_code_cell(
+            textwrap.dedent(
+                """\
             import ewatercycle.parameter_sets
             import ewatercycle.forcing
             import ewatercycle.models
             import ewatercycle.observation.grdc
             import ewatercycle.analysis\
             """
-        )),
+            )
+        ),
     ]
 
-    if 'parameter_set' in setup:
+    if "parameter_set" in setup:
         cells += [
-            new_markdown_cell('## Load parameter set'),
-            new_code_cell(textwrap.dedent(f"""\
+            new_markdown_cell("## Load parameter set"),
+            new_code_cell(
+                textwrap.dedent(
+                    f"""\
                 parameter_set = ewatercycle.parameter_sets.get_parameter_set("{setup['parameter_set']}")
                 parameter_set\
                 """
-            )),
+                )
+            ),
         ]
-    if 'forcing' in setup:
-        forcing = setup['forcing']
-        if not forcing.startswith('/'):
-            forcing = forcing_root_dir + '/' + forcing
+    if "forcing" in setup:
+        forcing = setup["forcing"]
+        if not forcing.startswith("/"):
+            forcing = forcing_root_dir + "/" + forcing
         cells += [
-            new_markdown_cell('## Load forcing data'),
-            new_code_cell(textwrap.dedent(f"""\
+            new_markdown_cell("## Load forcing data"),
+            new_code_cell(
+                textwrap.dedent(
+                    f"""\
                 forcing = ewatercycle.forcing.load("{forcing}")
                 forcing\
                 """
-                )),
+                )
+            ),
         ]
 
     cells += [
-        new_markdown_cell('## Setting up the model'),
+        new_markdown_cell("## Setting up the model"),
     ]
 
-    model_name = setup['model']['name']
-    model_version = setup['model']['version']
-    if 'parameter_set' in setup and 'forcing' in setup:
+    model_name = setup["model"]["name"]
+    model_version = setup["model"]["version"]
+    if "parameter_set" in setup and "forcing" in setup:
         cells += [
-            new_code_cell(textwrap.dedent(f"""\
+            new_code_cell(
+                textwrap.dedent(
+                    f"""\
                 model = ewatercycle.models.{model_name}(version="{model_version}", parameter_set=parameter_set, forcing=forcing)\
                 """
-                )),
+                )
+            ),
         ]
-    elif 'forcing' in setup:
+    elif "forcing" in setup:
         cells += [
-            new_code_cell(textwrap.dedent(f"""\
+            new_code_cell(
+                textwrap.dedent(
+                    f"""\
                 model = ewatercycle.models.{model_name}(version="{model_version}", forcing=forcing)\
                 """
-                )),
+                )
+            ),
         ]
-    elif 'parameter_set' in setup:
+    elif "parameter_set" in setup:
         cells += [
-            new_code_cell(textwrap.dedent(f"""\
+            new_code_cell(
+                textwrap.dedent(
+                    f"""\
                 model = ewatercycle.models.{model_name}(version="{model_version}", parameter_set=parameter_set)\
                 """
-                )),
+                )
+            ),
         ]
     else:
         cells += [
-            new_code_cell(textwrap.dedent(f"""\
+            new_code_cell(
+                textwrap.dedent(
+                    f"""\
                 model = ewatercycle.models.{model_name}(version="{model_version}")\
                 """
-                )),
+                )
+            ),
         ]
 
-    observation = setup['observation']
+    observation = setup["observation"]
     cells += [
-        new_markdown_cell('Current parameters of model.'),
-        new_code_cell(textwrap.dedent("""\
+        new_markdown_cell("Current parameters of model."),
+        new_code_cell(
+            textwrap.dedent(
+                """\
             model.parameters\
             """
-            )),
-        new_markdown_cell('Pass one or more parameters with a custom value to the setup method to overwrite.'),
-        new_code_cell(textwrap.dedent(f"""\
+            )
+        ),
+        new_markdown_cell(
+            "Pass one or more parameters with a custom value to the setup method to overwrite."
+        ),
+        new_code_cell(
+            textwrap.dedent(
+                f"""\
             cfg_file, cfg_dir = model.setup()
             cfg_file, cfg_dir\
             """
-            )),
-        new_markdown_cell('After setup the config file (`cfg_file`) can be edited if more customization is needed.'),
-        new_code_cell(textwrap.dedent(f"""\
+            )
+        ),
+        new_markdown_cell(
+            "After setup the config file (`cfg_file`) can be edited if more customization is needed."
+        ),
+        new_code_cell(
+            textwrap.dedent(
+                f"""\
             model.initialize(cfg_file)\
             """
-            )),
-        new_markdown_cell('## Observation'),
-        new_code_cell(textwrap.dedent(f"""\
+            )
+        ),
+        new_markdown_cell("## Observation"),
+        new_code_cell(
+            textwrap.dedent(
+                f"""\
             grdc_station_id = {observation['station_id']}
             observations_df, station_metadata = ewatercycle.observation.grdc.get_grdc_data(
                 station_id=grdc_station_id,
@@ -118,13 +156,16 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
                 column="GRDC",
             )\
             """
-            )),
-        new_markdown_cell('## Running the model'),
+            )
+        ),
+        new_markdown_cell("## Running the model"),
     ]
-    if 'lumped' in setup['model'] and setup['model']['lumped']:
+    if "lumped" in setup["model"] and setup["model"]["lumped"]:
         cells += [
             # TODO convert simulated values to same unit as observations eg mm/day to m3/s
-            new_code_cell(textwrap.dedent(f"""\
+            new_code_cell(
+                textwrap.dedent(
+                    f"""\
                 simulated_discharge = []
                 timestamps = []
                 while model.time < model.end_time:
@@ -134,32 +175,43 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
                     simulated_discharge.append(discharge)
                     timestamps.append(model.time_as_datetime.date())\
                 """
-                )),
+                )
+            ),
         ]
     else:
-        if 'model_location' in observation:
-            model_location = observation['model_location']
+        if "model_location" in observation:
+            model_location = observation["model_location"]
             cells += [
-                new_markdown_cell(f'''Get "{setup['variable']}" at model location equivalent to GRDC station location.'''),
-                new_code_cell(textwrap.dedent(f"""\
+                new_markdown_cell(
+                    f"""Get "{setup['variable']}" at model location equivalent to GRDC station location."""
+                ),
+                new_code_cell(
+                    textwrap.dedent(
+                        f"""\
                     grdc_longitude = {model_location['longitude']}
                     grdc_latitude = {model_location['latitude']}
                     grdc_longitude, grdc_latitude\
                     """
-                    )),
+                    )
+                ),
             ]
         else:
             cells += [
-                new_markdown_cell(f'''Get "{setup['variable']}" at GRDC station.'''),
-                new_code_cell(textwrap.dedent(f"""\
+                new_markdown_cell(f"""Get "{setup['variable']}" at GRDC station."""),
+                new_code_cell(
+                    textwrap.dedent(
+                        f"""\
                     grdc_longitude = station_metadata['grdc_longitude_in_arc_degree']\
                     grdc_latitude = station_metadata['grdc_latitude_in_arc_degree']
                     """
-                    )),
+                    )
+                ),
             ]
 
         cells += [
-            new_code_cell(textwrap.dedent(f"""\
+            new_code_cell(
+                textwrap.dedent(
+                    f"""\
                 simulated_discharge = []
                 timestamps = []
                 while model.time < model.end_time:
@@ -169,13 +221,18 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
                     timestamps.append(model.time_as_datetime.date())
                     print(f"Current time: {{model.time_as_isostr}}", end="\r")\
                 """
-                )),
-            ]
+                )
+            ),
+        ]
 
     cells += [
-        new_markdown_cell('## Analysis'),
-        new_markdown_cell('Combine simulated and observated discharge into a single dataframe'),
-        new_code_cell(textwrap.dedent("""\
+        new_markdown_cell("## Analysis"),
+        new_markdown_cell(
+            "Combine simulated and observated discharge into a single dataframe"
+        ),
+        new_code_cell(
+            textwrap.dedent(
+                """\
             simulated_discharge_df = pd.DataFrame(
                 {'simulation': simulated_discharge},
                 index=pd.to_datetime(timestamps)
@@ -183,22 +240,30 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
             combined_discharge = simulated_discharge_df.join(observations_df)
             combined_discharge\
             """
-            )),
-        new_markdown_cell('Plot hydrograph'),
-        new_code_cell(textwrap.dedent("""\
+            )
+        ),
+        new_markdown_cell("Plot hydrograph"),
+        new_code_cell(
+            textwrap.dedent(
+                """\
             ewatercycle.analysis.hydrograph(
                 discharge=combined_discharge,
                 reference="GRDC",
             )\
             """
-            )),
-        new_markdown_cell('## Clean up'),
-        new_code_cell(textwrap.dedent("""\
+            )
+        ),
+        new_markdown_cell("## Clean up"),
+        new_code_cell(
+            textwrap.dedent(
+                """\
             model.finalize()\
             """
-            )),
+            )
+        ),
     ]
     return new_notebook(cells=cells, metadata=PY3_META)
+
 
 def post(body):
     """Generate notebook and launch it
@@ -206,6 +271,6 @@ def post(body):
     Args:
         body: The json POST body as a Python object
     """
-    forcing_root_dir = current_app.config['FORCING_ROOT_DIR']
-    nb = notebook(body['setup'], forcing_root_dir)
-    return process_notebook(body['notebook'], nb)
+    forcing_root_dir = current_app.config["FORCING_ROOT_DIR"]
+    nb = notebook(body["setup"], forcing_root_dir)
+    return process_notebook(body["notebook"], nb)
