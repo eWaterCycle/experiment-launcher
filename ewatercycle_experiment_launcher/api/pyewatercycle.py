@@ -29,7 +29,8 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
             import ewatercycle.models
             import ewatercycle.observation.grdc
             import ewatercycle.analysis\
-        """)),
+            """
+        )),
     ]
 
     if 'parameter_set' in setup:
@@ -38,7 +39,8 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
             new_code_cell(textwrap.dedent(f"""\
                 parameter_set = ewatercycle.parameter_sets.get_parameter_set("{setup['parameter_set']}")
                 parameter_set\
-            """)),
+                """
+            )),
         ]
     if 'forcing' in setup:
         forcing = setup['forcing']
@@ -49,7 +51,8 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
             new_code_cell(textwrap.dedent(f"""\
                 forcing = ewatercycle.forcing.load("{forcing}")
                 forcing\
-            """)),
+                """
+                )),
         ]
 
     cells += [
@@ -62,25 +65,29 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
         cells += [
             new_code_cell(textwrap.dedent(f"""\
                 model = ewatercycle.models.{model_name}(version="{model_version}", parameter_set=parameter_set, forcing=forcing)\
-            """)),
+                """
+                )),
         ]
     elif 'forcing' in setup:
         cells += [
             new_code_cell(textwrap.dedent(f"""\
                 model = ewatercycle.models.{model_name}(version="{model_version}", forcing=forcing)\
-            """)),
+                """
+                )),
         ]
     elif 'parameter_set' in setup:
         cells += [
             new_code_cell(textwrap.dedent(f"""\
                 model = ewatercycle.models.{model_name}(version="{model_version}", parameter_set=parameter_set)\
-            """)),
+                """
+                )),
         ]
     else:
         cells += [
             new_code_cell(textwrap.dedent(f"""\
                 model = ewatercycle.models.{model_name}(version="{model_version}")\
-            """)),
+                """
+                )),
         ]
 
     observation = setup['observation']
@@ -88,16 +95,19 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
         new_markdown_cell('Current parameters of model.'),
         new_code_cell(textwrap.dedent("""\
             model.parameters\
-        """)),
+            """
+            )),
         new_markdown_cell('Pass one or more parameters with a custom value to the setup method to overwrite.'),
         new_code_cell(textwrap.dedent(f"""\
             cfg_file, cfg_dir = model.setup()
             cfg_file, cfg_dir\
-        """)),
+            """
+            )),
         new_markdown_cell('After setup the config file (`cfg_file`) can be edited if more customization is needed.'),
         new_code_cell(textwrap.dedent(f"""\
             model.initialize(cfg_file)\
-        """)),
+            """
+            )),
         new_markdown_cell('## Observation'),
         new_code_cell(textwrap.dedent(f"""\
             grdc_station_id = {observation['station_id']}
@@ -107,7 +117,8 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
                 end_time=model.end_time_as_isostr,
                 column="GRDC",
             )\
-        """)),
+            """
+            )),
         new_markdown_cell('## Running the model'),
     ]
     if 'lumped' in setup['model'] and setup['model']['lumped']:
@@ -122,7 +133,8 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
                     discharge = model.get_value("{setup['variable']}")[0]
                     simulated_discharge.append(discharge)
                     timestamps.append(model.time_as_datetime.date())\
-            """)),
+                """
+                )),
         ]
     else:
         if 'model_location' in observation:
@@ -130,17 +142,20 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
             cells += [
                 new_markdown_cell(f'''Get "{setup['variable']}" at model location equivalent to GRDC station location.'''),
                 new_code_cell(textwrap.dedent(f"""\
+                    grdc_longitude = {model_location['longitude']}
                     grdc_latitude = {model_location['latitude']}
-                    grdc_longitude = {model_location['longitude']}\
-                """)),
+                    grdc_longitude, grdc_latitude\
+                    """
+                    )),
             ]
         else:
             cells += [
                 new_markdown_cell(f'''Get "{setup['variable']}" at GRDC station.'''),
                 new_code_cell(textwrap.dedent(f"""\
-                    grdc_latitude = station_metadata['grdc_latitude_in_arc_degree']
                     grdc_longitude = station_metadata['grdc_longitude_in_arc_degree']\
-                """)),
+                    grdc_latitude = station_metadata['grdc_latitude_in_arc_degree']
+                    """
+                    )),
             ]
 
         cells += [
@@ -152,8 +167,9 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
                     discharge = model.get_value_at_coords("{setup['variable']}", lat=[grdc_latitude], lon=[grdc_longitude])[0]
                     simulated_discharge.append(discharge)
                     timestamps.append(model.time_as_datetime.date())
-                    output.append(discharge)\
-            """)),
+                    print(f"Current time: {{model.time_as_isostr}}", end="\r")\
+                """
+                )),
             ]
 
     cells += [
@@ -166,19 +182,21 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
             )
             combined_discharge = simulated_discharge_df.join(observations_df)
             combined_discharge\
-        """)),
+            """
+            )),
         new_markdown_cell('Plot hydrograph'),
         new_code_cell(textwrap.dedent("""\
-
             ewatercycle.analysis.hydrograph(
                 discharge=combined_discharge,
                 reference="GRDC",
             )\
-        """)),
+            """
+            )),
         new_markdown_cell('## Clean up'),
         new_code_cell(textwrap.dedent("""\
             model.finalize()\
-        """)),
+            """
+            )),
     ]
     return new_notebook(cells=cells, metadata=PY3_META)
 
