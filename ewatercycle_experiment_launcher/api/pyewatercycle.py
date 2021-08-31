@@ -32,7 +32,8 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
             import ewatercycle.forcing
             import ewatercycle.models
             import ewatercycle.observation.grdc
-            import ewatercycle.analysis\
+            import ewatercycle.analysis
+            import pandas as pd\
             """
             )
         ),
