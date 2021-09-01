@@ -221,7 +221,7 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
                         discharge = model.get_value_at_coords("{setup['variable']}", lat=[grdc_latitude], lon=[grdc_longitude])[0]
                         simulated_discharge.append(discharge)
                         timestamps.append(model.time_as_datetime.date())
-                        print(f"Current time: {{model.time_as_isostr}}", end="\r")\
+                        print(f"Current time: {{model.time_as_isostr}}", end="\\r")\
                     """
                 )
             ),
