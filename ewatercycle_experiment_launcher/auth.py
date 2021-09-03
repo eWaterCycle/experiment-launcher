@@ -24,7 +24,7 @@ def generate_token():
     timestamp = _current_timestamp()
     payload = {
         "iss": JWT_ISSUER,
-        "iat": int(timestamp),
+        "iat": timestamp,
         "sub": str(username),
     }
     JWT_SECRET = current_app.config['JWT_SECRET']
