@@ -31,7 +31,7 @@ def test_generate_token(app):
         assert len(response['token']) > 100
 
 
-def test_decode_token_authenicated(app):
+def test_decode_token_authenticated(app):
     with app.app.app_context():
         headers = {
             'Authorization': 'Basic ' + b64encode(b'someuser:somepw').decode('utf-8')
