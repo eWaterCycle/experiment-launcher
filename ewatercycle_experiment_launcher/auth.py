@@ -9,7 +9,7 @@ JWT_ISSUER = 'org.ewatercycle.launcher'
 JWT_ALGORITHM = 'HS256'
 
 
-def check_basic_auth(username, password, required_scopes=None):
+def check_basic_auth(username, password):
     if authenticate(username, password):
         return {'sub': username}
     return None
