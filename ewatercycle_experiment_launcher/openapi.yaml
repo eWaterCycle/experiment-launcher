@@ -4,8 +4,19 @@ info:
   title: eWaterCycle Experiment Launcher
   description: Webservice to generate and launch a Jupyter notebook
 security:
-  - BasicAuth: []
+  - jwt: [ 'secret' ]
 paths:
+  /auth:
+    post:
+      summary: Authenicate and return JWT token
+      operationId: ewatercycle_experiment_launcher.auth.generate_token
+      security:
+        - BasicAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/AuthResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
   /hello:
     post:
       summary: Notebook that prints Hello World
@@ -20,56 +31,14 @@ paths:
           $ref: '#/components/responses/NotebookResponse'
         default:
           $ref: '#/components/responses/ErrorResponse'
-  /opendap:
+  /pyewatercycle:
     post:
-      summary: Notebook that opens an opendap URL with xarray
+      summary: Run model on parameter set and forcing using eWatercycle Python package with hydrograph against an GRDC observation station
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/OpendapRequest'
-        description: The notebook to create
-      responses:
-        '200':
-          $ref: '#/components/responses/NotebookResponse'
-        default:
-          $ref: '#/components/responses/ErrorResponse'
-  /threeclickscience:
-    post:
-      summary: Three clicks to a science usecase
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ThreeClickScienceRequest'
-        description: The notebook to create
-      responses:
-        '200':
-          $ref: '#/components/responses/NotebookResponse'
-        default:
-          $ref: '#/components/responses/ErrorResponse'
-  /bmi:
-    post:
-      summary: Run model on parameter set using BMI
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BmiRequest'
-        description: The notebook to create
-      responses:
-        '200':
-          $ref: '#/components/responses/NotebookResponse'
-        default:
-          $ref: '#/components/responses/ErrorResponse'
-  /assessment:
-    post:
-      summary: Run model on parameter set using BMI with an model assesment against an observation station
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AssessmentRequest'
+              $ref: '#/components/schemas/PyewatercycleRequest'
         description: The notebook to create
       responses:
         '200':
@@ -80,9 +49,20 @@ components:
   securitySchemes:
     BasicAuth:
       type: http
-      x-basicInfoFunc: ewatercycle_experiment_launcher.auth.check_auth
+      x-basicInfoFunc: ewatercycle_experiment_launcher.auth.check_basic_auth
       scheme: basic
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: ewatercycle_experiment_launcher.auth.decode_token
   responses:
+      AuthResponse:
+          description: Successfully authenticated
+          content:
+              application/json:
+                  schema:
+                    $ref: '#/components/schemas/AuthResponse'
       NotebookResponse:
           description: Started Jupyter server and created notebook
           content:
@@ -96,6 +76,14 @@ components:
                   schema:
                       $ref: '#/components/schemas/Error'
   schemas:
+    AuthResponse:
+      type: object
+      required:
+        - token
+      properties:
+        token:
+          type: string
+      additionalProperties: false
     NotebookRequest:
       type: object
       required:
@@ -160,59 +148,7 @@ components:
       required:
         - notebook
       additionalProperties: false
-    OpendapRequest:
-      type: object
-      properties:
-        opendap:
-          type: string
-          format: uri
-          description: URL of opendap endpoint
-          example: https://thredds-test.unidata.ucar.edu/thredds/dodsC/satellite/goes16/agg/conus/01
-        notebook:
-          $ref: '#/components/schemas/NotebookRequest'
-      required:
-        - notebook
-        - opendap
-      additionalProperties: false
-    ThreeClickScienceRequest:
-      type: object
-      properties:
-        setup:
-          type: object
-          properties:
-            model:
-              type: string
-              description: Model identifier
-              example: wflow
-            region:
-              type: string
-              description: 'Region identifier, eg. hydroshed id'
-              example: donau
-            period:
-              type: object
-              properties:
-                start:
-                  type: string
-                  format: date-time
-                end:
-                  type: string
-                  format: date-time
-              required:
-                - start
-                - end
-              additionalProperties: false
-          required:
-            - model
-            - region
-            - period
-          additionalProperties: false
-        notebook:
-          $ref: '#/components/schemas/NotebookRequest'
-      required:
-        - notebook
-        - setup
-      additionalProperties: false
-    BmiRequest:
+    PyewatercycleRequest:
       type: object
       required:
         - notebook
@@ -225,141 +161,62 @@ components:
           type: object
           required:
             - model
-            - datafiles
-            - config
-          additionalProperties: false
-          properties:
-            model:
-              type: object
-              required:
-                - grpc4bmi_container
-              properties:
-                grpc4bmi_container:
-                  type: string
-                  example: 'ewatercycle/pcrg-grpc4bmi:latest'
-            datafiles:
-              type: object
-              additionalProperties: false
-              required:
-                - format
-                - url
-              properties:
-                format:
-                  type: string
-                  example: svn
-                url:
-                  type: string
-                  example: >-
-                    https://github.com/UU-Hydro/PCR-GLOBWB_input_example/trunk/RhineMeuse30min
-            config:
-              type: object
-              additionalProperties: false
-              required:
-                - format
-                - url
-              properties:
-                format:
-                  type: string
-                  example: ini
-                url:
-                  type: string
-                  example: >-
-                    https://raw.githubusercontent.com/UU-Hydro/PCR-GLOBWB_input_example/master/RhineMeuse30min/ini_and_batch_files/rapid/setup_natural_test.ini
-            plotting:
-              type: object
-              additionalProperties: false
-              required:
-                - variable
-                - index
-              properties:
-                variable:
-                  type: string
-                  example: discharge
-                index:
-                  type: number
-                  example: 86
-    AssessmentRequest:
-      type: object
-      required:
-        - notebook
-        - setup
-      additionalProperties: false
-      properties:
-        notebook:
-          $ref: '#/components/schemas/NotebookRequest'
-        setup:
-          type: object
-          required:
-            - model
-            - datafiles
-            - config
-            - assessment
+            - variable
+            - observation
           additionalProperties: false
           properties:
             model:
               type: object
               required:
                 - name
-                - grpc4bmi_container
+                - version
               properties:
                 name:
                   type: string
-                  description: Name of model
-                  example: PCR-GLOBWB
-                grpc4bmi_container:
+                  description: Name of model as defined in ewatercycle.models module
+                  example: PCRGlobWB
+                version:
                   type: string
-                  example: 'ewatercycle/pcrg-grpc4bmi:latest'
-            datafiles:
+                  description: Version of model to use
+                  example: setters
+                lumped:
+                  type: boolean
+                  description: Whether model is lumped or non-lumped model
+                  default: false
+              additionalProperties: false
+            forcing:
+                type: string
+                description: Directory name of forcing. Directory should contain `ewatercycle_forcing.yaml` file.
+                example: marrmot-m01_example_1989-1992_buffalo-river
+            parameter_set:
+                type: string
+                description: Name of parameter set. Should be one of names returned by `ewatercycle.parameter_sets.available_parameter_sets()`.
+                example: 'pcrglobwb_rhinemeuse_30min'
+            variable:
+                type: string
+                description: Name of output variable of model used for assessment
+                example: discharge
+            observation:
               type: object
               additionalProperties: false
               required:
-                - format
-                - url
-              properties:
-                format:
-                  type: string
-                  example: svn
-                url:
-                  type: string
-                  example: >-
-                    https://github.com/UU-Hydro/PCR-GLOBWB_input_example/trunk/RhineMeuse30min
-            config:
-              type: object
-              additionalProperties: false
-              required:
-                - format
-                - url
-              properties:
-                format:
-                  type: string
-                  example: ini
-                url:
-                  type: string
-                  example: >-
-                    https://raw.githubusercontent.com/UU-Hydro/PCR-GLOBWB_input_example/master/RhineMeuse30min/ini_and_batch_files/rapid/setup_natural_test.ini
-            assessment:
-              type: object
-              additionalProperties: false
-              required:
-                - variable
-                - index
-                - source
                 - station_id
               properties:
-                variable:
-                  type: string
-                  description: Name of output variable of bmi model used for assesment
-                  example: discharge
-                index:
-                  type: number
-                  description: Index in the <variable> array (retrieved with bmi_model.get_value(<variable>)) that corresponds with the location of the observation station.
-                  example: 86
-                source:
-                  description: Source of observations
-                  type: string
-                  enum: [grdc, usgs]
-                  default: grdc
                 station_id:
-                  description: Station identifier for the selected source of observations.
+                  description: GRCD observation station identifier.
                   type: string
-                  example: '6970500'
+                  example: '6335020'
+                model_location:
+                  type: object
+                  description: Location which matches model outlet pixel closest to observation station. If not given then uses exact location of station.
+                  properties:
+                    longitude:
+                        type: number
+                        example: 6.395395
+                    latitude:
+                        type: number
+                        example: 51.756918
+                  required:
+                    - longitude
+                    - latitude
+                  additionalProperties: false

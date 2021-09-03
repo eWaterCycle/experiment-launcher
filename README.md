@@ -18,10 +18,12 @@ Instructions below have been tested on Linux, but should also work on OSX and Wi
 
 The experiment launcher requires a JupyterHub server.
 
+JupyterHub requires a NodeJS preferable installed in users home directory with [nvm](https://github.com/nvm-sh/nvm).
+
 JupyterHub can be installed with the following commands
 ```bash
 pip3 install jupyterhub jupyterlab
-sudo npm install -g configurable-http-proxy
+npm install -g configurable-http-proxy
 ```
 
 JupyterHub must accept calls from the experiment launcher service to start a notebook server for any hub user and upload a notebook.
@@ -84,16 +86,23 @@ To start launcher use
 ```bash
 # JUPYTERHUB_URL is URL where JupyterHub is running. If path like `/jupyter` then origin header is appended.
 export JUPYTERHUB_URL=http://172.17.0.1:8000
+# JWT_SECRET is secret with which JWT tokens are encoded/decoded
+export JWT_SECRET=$(openssl rand -hex 32)
+# Root directory where read only forcings can be found
+export FORCING_ROOT_DIR=/mnt/data/forcing
 gunicorn -w 4 -b 0.0.0.0:8888 ewatercycle_experiment_launcher.serve:app
 ```
 
 Goto http://localhost:8888/ui/ for Swagger UI.
 
 The JupyterHub and Experiment Launcher both use local OS accounts for authentication and authorization.
+To generate a notebook you need to
+1. POST to /auth with Basic authentication to receive a JWT token
+2. POST to a notebook path, like /hello, with `Authorization: Bearer <jwt token>` header.
 
-In the Swagger UI you must authorize before trying an operation.
+In the Swagger UI you must authorize twice before trying a path.
 
-When running on Internet make sure https is enforced so the authentication is secure.
+When running on Internet make sure https is enforced, so the authentication is secure.
 
 The webservice by default runs on `/` base path. This can be changed by setting the `BASE_PATH` environment variable.
 For example `export BASE_PATH=/launcher` will host the Swagger UI on http://localhost:8888/launcher/ui/ .
