@@ -18,10 +18,12 @@ Instructions below have been tested on Linux, but should also work on OSX and Wi
 
 The experiment launcher requires a JupyterHub server.
 
+JupyterHub requires a NodeJS preferable installed in users home directory with [nvm](https://github.com/nvm-sh/nvm).
+
 JupyterHub can be installed with the following commands
 ```bash
 pip3 install jupyterhub jupyterlab
-sudo npm install -g configurable-http-proxy
+npm install -g configurable-http-proxy
 ```
 
 JupyterHub must accept calls from the experiment launcher service to start a notebook server for any hub user and upload a notebook.
