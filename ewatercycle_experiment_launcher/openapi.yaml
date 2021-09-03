@@ -190,7 +190,7 @@ components:
                 example: marrmot-m01_example_1989-1992_buffalo-river
             parameter_set:
                 type: string
-                description: Name of pararmeter set. Should be one of names returned by `ewatercycle.parameter_sets.available_parameter_sets()`.
+                description: Name of parameter set. Should be one of names returned by `ewatercycle.parameter_sets.available_parameter_sets()`.
                 example: 'pcrglobwb_rhinemeuse_30min'
             variable:
                 type: string
