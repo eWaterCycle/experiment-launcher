@@ -20,8 +20,7 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
 
         We will use GRDC data for comparison between the model simulation and the observations.
 
-        In this example notebook we run a hydrology model using [ewayercycle](https://github.com/eWaterCycle/ewatercycle).
-        """
+        In this example notebook we run a hydrology model using [ewayercycle](https://github.com/eWaterCycle/ewatercycle)."""
     )
     cells = [
         new_markdown_cell(welcome),
@@ -33,8 +32,7 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
                 import ewatercycle.models
                 import ewatercycle.observation.grdc
                 import ewatercycle.analysis
-                import pandas as pd\
-                """
+                import pandas as pd"""
             )
         ),
     ]
@@ -46,8 +44,7 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
                 textwrap.dedent(
                     f"""\
                     parameter_set = ewatercycle.parameter_sets.get_parameter_set("{setup['parameter_set']}")
-                    parameter_set\
-                    """
+                    parameter_set"""
                 )
             ),
         ]
@@ -61,8 +58,7 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
                 textwrap.dedent(
                     f"""\
                     forcing = ewatercycle.forcing.load("{forcing}")
-                    forcing\
-                    """
+                    forcing"""
                 )
             ),
         ]
@@ -78,8 +74,11 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
             new_code_cell(
                 textwrap.dedent(
                     f"""\
-                    model = ewatercycle.models.{model_name}(version="{model_version}", parameter_set=parameter_set, forcing=forcing)\
-                    """
+                    model = ewatercycle.models.{model_name}(
+                        version="{model_version}",
+                        parameter_set=parameter_set,
+                        forcing=forcing
+                    )"""
                 )
             ),
         ]
@@ -88,8 +87,9 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
             new_code_cell(
                 textwrap.dedent(
                     f"""\
-                    model = ewatercycle.models.{model_name}(version="{model_version}", forcing=forcing)\
-                    """
+                    model = ewatercycle.models.{model_name}(
+                        version="{model_version}",
+                        forcing=forcing)"""
                 )
             ),
         ]
@@ -98,8 +98,9 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
             new_code_cell(
                 textwrap.dedent(
                     f"""\
-                    model = ewatercycle.models.{model_name}(version="{model_version}", parameter_set=parameter_set)\
-                    """
+                    model = ewatercycle.models.{model_name}(
+                        version="{model_version}",
+                        parameter_set=parameter_set)"""
                 )
             ),
         ]
@@ -108,8 +109,7 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
             new_code_cell(
                 textwrap.dedent(
                     f"""\
-                    model = ewatercycle.models.{model_name}(version="{model_version}")\
-                    """
+                    model = ewatercycle.models.{model_name}(version="{model_version}")"""
                 )
             ),
         ]
@@ -120,8 +120,7 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
         new_code_cell(
             textwrap.dedent(
                 """\
-                model.parameters\
-                """
+                model.parameters"""
             )
         ),
         new_markdown_cell(
@@ -131,8 +130,7 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
             textwrap.dedent(
                 f"""\
                 cfg_file, cfg_dir = model.setup()
-                cfg_file, cfg_dir\
-                """
+                cfg_file, cfg_dir"""
             )
         ),
         new_markdown_cell(
@@ -141,8 +139,7 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
         new_code_cell(
             textwrap.dedent(
                 f"""\
-                model.initialize(cfg_file)\
-                """
+                model.initialize(cfg_file)"""
             )
         ),
         new_markdown_cell("## Observation"),
@@ -155,8 +152,7 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
                     start_time=model.start_time_as_isostr,
                     end_time=model.end_time_as_isostr,
                     column="GRDC",
-                )\
-                """
+                )"""
             )
         ),
         new_markdown_cell("## Running the model"),
@@ -175,8 +171,7 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
                         discharge = model.get_value("{setup['variable']}")[0]
                         simulated_discharge.append(discharge)
                         timestamps.append(model.time_as_datetime.date())
-                        print(f"Current time: {{model.time_as_isostr}}", end="\\r")\
-                    """
+                        print(f"Current time: {{model.time_as_isostr}}", end="\\r")"""
                 )
             ),
         ]
@@ -192,8 +187,7 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
                         f"""\
                         grdc_longitude = {model_location['longitude']}
                         grdc_latitude = {model_location['latitude']}
-                        grdc_longitude, grdc_latitude\
-                        """
+                        grdc_longitude, grdc_latitude"""
                     )
                 ),
             ]
@@ -205,8 +199,7 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
                         f"""\
                         grdc_longitude = station_metadata['grdc_longitude_in_arc_degree']
                         grdc_latitude = station_metadata['grdc_latitude_in_arc_degree']
-                        grdc_longitude, grdc_latitude\
-                        """
+                        grdc_longitude, grdc_latitude"""
                     )
                 ),
             ]
@@ -222,8 +215,7 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
                         discharge = model.get_value_at_coords("{setup['variable']}", lat=[grdc_latitude], lon=[grdc_longitude])[0]
                         simulated_discharge.append(discharge)
                         timestamps.append(model.time_as_datetime.date())
-                        print(f"Current time: {{model.time_as_isostr}}", end="\\r")\
-                    """
+                        print(f"Current time: {{model.time_as_isostr}}", end="\\r")"""
                 )
             ),
         ]
@@ -241,8 +233,7 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
                     index=pd.to_datetime(timestamps)
                 )
                 combined_discharge = simulated_discharge_df.join(observations_df)
-                combined_discharge\
-                """
+                combined_discharge"""
             )
         ),
         new_markdown_cell("Plot hydrograph"),
@@ -251,17 +242,15 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
                 """\
                 ewatercycle.analysis.hydrograph(
                     discharge=combined_discharge,
-                    reference="GRDC",
-                )\
-                """
+                    reference="GRDC"
+                )"""
             )
         ),
         new_markdown_cell("## Clean up"),
         new_code_cell(
             textwrap.dedent(
                 """\
-                model.finalize()\
-                """
+                model.finalize()"""
             )
         ),
     ]
