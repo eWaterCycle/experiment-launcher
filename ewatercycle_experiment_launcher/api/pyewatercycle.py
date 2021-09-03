@@ -174,7 +174,8 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
                         # Lumped models only have single value so can get whole value instead of geting value at a geospatial location
                         discharge = model.get_value("{setup['variable']}")[0]
                         simulated_discharge.append(discharge)
-                        timestamps.append(model.time_as_datetime.date())\
+                        timestamps.append(model.time_as_datetime.date())
+                        print(f"Current time: {{model.time_as_isostr}}", end="\\r")\
                     """
                 )
             ),
