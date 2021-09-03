@@ -38,6 +38,7 @@ def test_notebook_pcrglobwb_with_forcing():
 
     assert isinstance(nb, NotebookNode)
     assert len(nb['cells']) == 27
+    assert '/mnt/data/forcing/pcrglobwb_ERA5_1990-1990_rhinemeuse' in nb['cells'][5]['source']
 
 
 def test_notebook_pcrglobwb_with_location():

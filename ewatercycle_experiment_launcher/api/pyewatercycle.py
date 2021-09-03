@@ -1,6 +1,7 @@
+from pathlib import Path
+
 import textwrap
 from flask import current_app
-
 from nbformat import NotebookNode
 from nbformat.v4 import new_markdown_cell, new_code_cell, new_notebook
 
@@ -49,9 +50,9 @@ def notebook(setup: dict, forcing_root_dir: str) -> NotebookNode:
             ),
         ]
     if "forcing" in setup:
-        forcing = setup["forcing"]
-        if not forcing.startswith("/"):
-            forcing = forcing_root_dir + "/" + forcing
+        forcing = Path(setup["forcing"])
+        if not forcing.is_absolute():
+            forcing = Path(forcing_root_dir, forcing)
         cells += [
             new_markdown_cell("## Load forcing data"),
             new_code_cell(
